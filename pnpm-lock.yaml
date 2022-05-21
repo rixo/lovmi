@@ -1,24 +1,48 @@
 lockfileVersion: 5.3
 
 specifiers:
+  '@fortawesome/free-solid-svg-icons': ^6.1.1
   '@sveltejs/adapter-auto': next
   '@sveltejs/kit': next
+  bulma: ^0.9.4
+  clsx: ^1.1.1
   prettier: ^2.5.1
   prettier-plugin-svelte: ^2.5.0
   svelte: ^3.44.0
+  svelte-bricks: ^0.1.7
   svelte-check: ^2.2.6
+  svelte-fa: ^2.4.0
   typescript: ~4.6.2
 
 devDependencies:
+  '@fortawesome/free-solid-svg-icons': 6.1.1
   '@sveltejs/adapter-auto': 1.0.0-next.43
-  '@sveltejs/kit': 1.0.0-next.335_svelte@3.48.0
+  '@sveltejs/kit': 1.0.0-next.336_svelte@3.48.0
+  bulma: 0.9.4
+  clsx: 1.1.1
   prettier: 2.6.2
   prettier-plugin-svelte: 2.7.0_prettier@2.6.2+svelte@3.48.0
   svelte: 3.48.0
+  svelte-bricks: 0.1.7
   svelte-check: 2.7.1_svelte@3.48.0
+  svelte-fa: 2.4.0
   typescript: 4.6.4
 
 packages:
+
+  /@fortawesome/fontawesome-common-types/6.1.1:
+    resolution: {integrity: sha512-wVn5WJPirFTnzN6tR95abCx+ocH+3IFLXAgyavnf9hUmN0CfWoDjPT/BAWsUVwSlYYVBeCLJxaqi7ZGe4uSjBA==}
+    engines: {node: '>=6'}
+    requiresBuild: true
+    dev: true
+
+  /@fortawesome/free-solid-svg-icons/6.1.1:
+    resolution: {integrity: sha512-0/5exxavOhI/D4Ovm2r3vxNojGZioPwmFrKg0ZUH69Q68uFhFPs6+dhAToh6VEQBntxPRYPuT5Cg1tpNa9JUPg==}
+    engines: {node: '>=6'}
+    requiresBuild: true
+    dependencies:
+      '@fortawesome/fontawesome-common-types': 6.1.1
+    dev: true
 
   /@iarna/toml/2.2.5:
     resolution: {integrity: sha512-trnsAYxU3xnS1gPHPyU961coFyLkh4gAD/0zQ5mymY4yOZ+CYvsPqUbOFSw0aDM4y0tV7tiFxL/1XfXPNC6IPg==}
@@ -98,8 +122,8 @@ packages:
       esbuild: 0.14.39
     dev: true
 
-  /@sveltejs/kit/1.0.0-next.335_svelte@3.48.0:
-    resolution: {integrity: sha512-iZutvIJSSNJJGceZOX2ZWqcyRqp9MIPnNWOgOLXqBG/Z/+KLoN8MRI0U79XIw232SAEXhhkwaJtB3UnXQSu85A==}
+  /@sveltejs/kit/1.0.0-next.336_svelte@3.48.0:
+    resolution: {integrity: sha512-DfERqclfwI8Gdx8/p5qIU3vwEOQfWqC8+BXR12bNykbXFM1k8koDplRDpmGzcsXyhslf83j+RmchnkifbNLjsw==}
     engines: {node: '>=16'}
     hasBin: true
     peerDependencies:
@@ -190,6 +214,10 @@ packages:
     resolution: {integrity: sha512-VO9Ht/+p3SN7SKWqcrgEzjGbRSJYTx+Q1pTQC0wrWqHx0vpJraQ6GtHx8tvcg1rlK1byhU5gccxgOgj7B0TDkQ==}
     dev: true
 
+  /bulma/0.9.4:
+    resolution: {integrity: sha512-86FlT5+1GrsgKbPLRRY7cGDg8fsJiP/jzTqXXVqiUZZ2aZT8uemEOHlU1CDU+TxklPEZ11HZNNWclRBBecP4CQ==}
+    dev: true
+
   /callsites/3.1.0:
     resolution: {integrity: sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ==}
     engines: {node: '>=6'}
@@ -208,6 +236,11 @@ packages:
       readdirp: 3.6.0
     optionalDependencies:
       fsevents: 2.3.2
+    dev: true
+
+  /clsx/1.1.1:
+    resolution: {integrity: sha512-6/bPho624p3S2pMyvP5kKBPXnI3ufHLObBFCfgx+LkeR5lg2XYy2hqZqUf45ypD8COn2bhgGJSUE+l5dhNBieA==}
+    engines: {node: '>=6'}
     dev: true
 
   /concat-map/0.0.1:
@@ -815,6 +848,10 @@ packages:
     engines: {node: '>= 0.4'}
     dev: true
 
+  /svelte-bricks/0.1.7:
+    resolution: {integrity: sha512-2wJseuhlVYVRoCKJGQuwCySTMsvBVS4dchah6Ecz9RNng0zufx6NxToXc7iGf0QOHjo9wwAsOczRI+Ou2q4gEg==}
+    dev: true
+
   /svelte-check/2.7.1_svelte@3.48.0:
     resolution: {integrity: sha512-vHVu2+SQ6ibt77iTQaq2oiOjBgGL48qqcg0ZdEOsP5pPOjgeyR9QbnaEdzdBs9nsVYBc/42haKtzb2uFqS8GVw==}
     hasBin: true
@@ -841,6 +878,10 @@ packages:
       - sass
       - stylus
       - sugarss
+    dev: true
+
+  /svelte-fa/2.4.0:
+    resolution: {integrity: sha512-0bnbMGbsE1LUnlioDcf27tl2O8kjuXlTXMXzIxC7LoIOWmqn0D+zd539HfLiQbdLuOHGTaynwN9V+4ehhEu1Jw==}
     dev: true
 
   /svelte-hmr/0.14.11_svelte@3.48.0:
