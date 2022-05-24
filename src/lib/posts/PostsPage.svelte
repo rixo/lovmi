@@ -80,21 +80,23 @@
           />
         </div>
       {/each} -->
-      <div class="card my-5">
-        <div class="card-content">
-          <div class="title">À court d'idée&nbsp;?</div>
-          <div class="subtitle">
-            Fais <strong>bouger</strong> les choses&nbsp;!
-          </div>
-          <div class="card-footer-item">
-            <a href="/post" class="button is-primary is-medium">
-              <!-- <span class="icon"><Fa icon={faCirclePlus} /></span> -->
-              <span><strong>Nouvelle idée</strong></span>
-              <span class="icon"><Fa icon={faLightbulb} /></span>
-            </a>
+      {#if showAlreadyVoted || items.length === 0}
+        <div class="card my-5 cta" transition:scale>
+          <div class="card-content">
+            <div class="title">À court d'idée&nbsp;?</div>
+            <div class="subtitle">
+              Fais <strong>bouger</strong> les choses&nbsp;!
+            </div>
+            <div class="card-footer-item">
+              <a href="/post" class="button is-primary is-medium">
+                <!-- <span class="icon"><Fa icon={faCirclePlus} /></span> -->
+                <span><strong>Nouvelle idée</strong></span>
+                <span class="icon"><Fa icon={faLightbulb} /></span>
+              </a>
+            </div>
           </div>
         </div>
-      </div>
+      {/if}
     {/if}
   </div>
 </div>
@@ -112,4 +114,10 @@
     min-width: 20rem;
     margin: 0.5rem;
   } */
+  @media screen and (min-width: 600px) {
+    .cta.card {
+      max-width: 50%;
+      margin: auto;
+    }
+  }
 </style>
