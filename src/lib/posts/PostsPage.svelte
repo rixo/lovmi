@@ -80,7 +80,7 @@
           />
         </div>
       {/each} -->
-      {#if showAlreadyVoted || items.length === 0}
+      {#if items.length === 0}
         <div class="card my-5 cta" transition:scale>
           <div class="card-content">
             <div class="title">À court d'idée&nbsp;?</div>
