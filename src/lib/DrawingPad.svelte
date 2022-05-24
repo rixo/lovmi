@@ -14,7 +14,9 @@
   export let hasData = false
 
   onMount(() => {
-    signaturePad = new SignaturePad(canvas)
+    signaturePad = new SignaturePad(canvas, {
+      minDistance: 2,
+    })
 
     const ratio = Math.max(window.devicePixelRatio || 1, 1)
     canvas.width = canvas.offsetWidth * ratio
