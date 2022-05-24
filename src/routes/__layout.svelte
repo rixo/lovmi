@@ -49,7 +49,6 @@
 
 <style>
   :global(body) {
-    font-family: sans;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
