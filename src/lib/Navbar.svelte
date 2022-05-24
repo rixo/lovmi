@@ -5,7 +5,10 @@
   export let user
 
   $: userLoading = user.loading
-  $: disconnect = () => user.disconnect()
+  $: disconnect = () => {
+    user.disconnect()
+    menuActive = false
+  }
 
   export let loginModal
 
@@ -82,17 +85,17 @@
             <div class="buttons">
               <a
                 href
-                class="button is-success is-outlined"
-                on:click|preventDefault={closeAnd(loginModal.goToSignin)}
-              >
-                <strong>Connexion</strong>
-              </a>
-              <a
-                href
                 class="button is-outlined"
                 on:click|preventDefault={closeAnd(loginModal.goToSignup)}
               >
                 Créer mon compte
+              </a>
+              <a
+                href
+                class="button is-success is-outlined"
+                on:click|preventDefault={closeAnd(loginModal.goToSignin)}
+              >
+                <strong>Connexion</strong>
               </a>
             </div>
           </div>
