@@ -63,6 +63,7 @@
 
   const clear = () => {
     signaturePad.clear() // otherwise isEmpty() might return incorrect value
+    updateHasData()
   }
 
   const setColor = (color) => {
