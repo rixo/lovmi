@@ -1,6 +1,7 @@
 <script>
   import Fa from "svelte-fa"
-  import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons"
+  import fa from "@fortawesome/free-solid-svg-icons"
+  const { faExclamationTriangle } = fa
 
   export let createUser
 
