@@ -13,17 +13,15 @@
 
   export let hasData = false
 
+  let width
+  let height
+
   onMount(() => {
     signaturePad = new SignaturePad(canvas, {
       minDistance: 2,
     })
 
-    const ratio = Math.max(window.devicePixelRatio || 1, 1)
-    canvas.width = canvas.offsetWidth * ratio
-    canvas.height = canvas.offsetHeight * ratio
-    canvas.getContext("2d").scale(ratio, ratio)
-
-    signaturePad.clear()
+    handleResize()
 
     signaturePad.addEventListener("beginStroke", () => {
       redoStack = []
@@ -31,6 +29,21 @@
 
     signaturePad.addEventListener("endStroke", updateHasData)
   })
+
+  const handleResize = () => {
+    // guard: size not changed
+    if (width === canvas.offsetWidth && height === canvas.offsetHeight) return
+
+    width = canvas.offsetWidth
+    height = canvas.offsetHeight
+
+    const ratio = Math.max(window.devicePixelRatio || 1, 1)
+    canvas.width = width * ratio
+    canvas.height = height * ratio
+    canvas.getContext("2d").scale(ratio, ratio)
+
+    signaturePad.clear()
+  }
 
   export const getDataURL = () => {
     if (!signaturePad) return
@@ -101,6 +114,8 @@
     "burlywood",
   ]
 </script>
+
+<svelte:window on:resize={handleResize} />
 
 <svelte:body on:keydown={handleKeydown} />
 
