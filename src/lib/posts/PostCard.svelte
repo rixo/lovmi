@@ -1,6 +1,6 @@
 <script>
   import Fa from "svelte-fa"
-  import { faHeartCrack, faHeart } from "$lib/icons"
+  import { faHeartCrack, faHeart, faThumbsDown } from "$lib/icons"
 
   import { getUser } from "$lib/user"
 
@@ -51,20 +51,20 @@
   <div class="card-footer">
     <a
       href
+      class="card-footer-item negative"
+      class:active={downvoted}
+      on:click|preventDefault={downvote}
+    >
+      <Fa icon={faThumbsDown} class="icon" />
+    </a>
+    <div class="card-footer-item">{post.score}</div>
+    <a
+      href
       class="card-footer-item positive"
       class:active={upvoted}
       on:click|preventDefault={upvote}
     >
       <Fa icon={faHeart} class="icon" />
-    </a>
-    <div class="card-footer-item">{post.score}</div>
-    <a
-      href
-      class="card-footer-item negative"
-      class:active={downvoted}
-      on:click|preventDefault={downvote}
-    >
-      <Fa icon={faHeartCrack} class="icon" />
     </a>
   </div>
 </div>
@@ -73,10 +73,11 @@
   a.card-footer-item:not(:hover) {
     color: hsl(0, 0%, 71%);
   }
-  a.card-footer-item.positive.active:not(:hover) {
+  a.card-footer-item.positive.active {
     color: hsl(300, 100%, 61%);
   }
-  a.card-footer-item.negative.active:not(:hover) {
+  a.card-footer-item.negative.active {
     color: hsl(204, 86%, 53%);
+    color: hsl(345, 86%, 53%);
   }
 </style>

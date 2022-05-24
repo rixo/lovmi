@@ -10,9 +10,12 @@ export {
   faHeart,
   faHeartCrack,
   faLock,
+  faPoop,
   faRotateLeft,
   faRotateRight,
   faSquare,
+  faThumbsDown,
+  faThumbsUp,
   faUser,
   faXmark,
 } from "../../vendor/fa.js"
