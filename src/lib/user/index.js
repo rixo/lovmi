@@ -1,4 +1,3 @@
-import { setContext, getContext } from "svelte"
 import { get, writable } from "svelte/store"
 
 import { noop, readOnly } from "$lib/util"
@@ -43,7 +42,7 @@ const userGateway = (() => {
   }
 })()
 
-export const initUserContext = () => {
+const initUserContext = () => {
   const loginModal = writable(false)
 
   const user = writable(null)
@@ -90,7 +89,8 @@ export const initUserContext = () => {
   }
 
   const createUser = async (params) => {
-    user.set(await userGateway.createUser(params))
+    const $user = await userGateway.createUser(params)
+    user.set($user)
   }
 
   const whenLoginModalIsClosed = (callback) => {
@@ -123,19 +123,12 @@ export const initUserContext = () => {
     whenLoginModalIsClosed,
   }
 
-  setContext(key, ctx)
-
   return ctx
 }
 
-// export const user = {
-// 	subscribe(subscriber) {
-// 		const { user } = getUserContext()
-// 		return user.subscribe(subscriber)
-// 	}
-// }
+const ctx = initUserContext()
 
-export const getUserContext = () => getContext(key)
+export const getUserContext = () => ctx
 
 const getUserFromContext = (ctx) => async () => {
   const user = get(ctx.user)

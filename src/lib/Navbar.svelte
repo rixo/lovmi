@@ -1,6 +1,10 @@
 <script>
   import Fa from "svelte-fa"
-  import { faUser, faDoorOpen } from "@fortawesome/free-solid-svg-icons"
+  import {
+    faUser,
+    faDoorOpen,
+    faCirclePlus,
+  } from "@fortawesome/free-solid-svg-icons"
 
   export let user
 
@@ -28,6 +32,12 @@
         <strong class="lovmi-brand">Lovmi</strong>
       </a>
 
+      <div class="navbar-item">
+        <a href="/post" class="button is-primary">
+          <span class="icon"><Fa icon={faCirclePlus} /></span>
+          <span><strong>Post</strong></span>
+        </a>
+      </div>
       <a
         href
         role="button"
@@ -61,6 +71,10 @@
               <span>{$user.name}</span>
             </a>
             <div class="navbar-dropdown">
+              <a class="navbar-item" href="/account">
+                <!-- <Fa icon={faDoorOpen} class="icon" /> -->
+                <span>Mon compte</span>
+              </a>
               <a class="navbar-item" href on:click|preventDefault={disconnect}>
                 <!-- <Fa icon={faDoorOpen} class="icon" /> -->
                 <span>Déconnexion</span>
@@ -72,14 +86,14 @@
             <div class="buttons">
               <a
                 href
-                class="button is-primary"
+                class="button is-primary is-outlined"
                 on:click|preventDefault={closeAnd(loginModal.goToSignin)}
               >
                 <strong>Connexion</strong>
               </a>
               <a
                 href
-                class="button is-light"
+                class="button is-link is-outlined"
                 on:click|preventDefault={closeAnd(loginModal.goToSignup)}
                 >Créer un compte</a
               >

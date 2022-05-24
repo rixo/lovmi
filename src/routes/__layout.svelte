@@ -1,7 +1,7 @@
 <script>
   import "$lib/global.css"
 
-  import { initUserContext } from "$lib/user"
+  import { getUserContext } from "$lib/user"
   import Navbar from "$lib/Navbar.svelte"
   import LoginModal from "$lib/LoginModal/index.svelte"
 
@@ -12,7 +12,7 @@
     goToSignin,
     closeLoginModal,
     createUser,
-  } = initUserContext()
+  } = getUserContext()
 </script>
 
 <div class="wrapper">
@@ -56,6 +56,10 @@
 
   .wrapper {
     flex: 1;
+  }
+
+  footer {
+    margin-top: 1rem;
   }
 
   footer .image {

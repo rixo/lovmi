@@ -8,8 +8,6 @@
 
   export let user
 
-  $: console.log("PostCard user", $user)
-
   const vote = (value) => {
     $getUser()
       .then((user) => {
@@ -31,20 +29,24 @@
 
 <div class="card">
   {#if post.image}
-    <div class="card-image">
+    <div class="card-image p-5">
       <figure class="image is-4by3">
         <img src={post.image} alt="Post" />
       </figure>
     </div>
   {/if}
   <div class="card-content">
-    <h2 class="title is-size-4">{post.title}</h2>
+    {#if post.title}
+      <h2 class="title is-size-4">{post.title}</h2>
+    {/if}
     <h3 class="subtitle is-size-6">
       <a href="/profile/{post.author}">@{post.author}</a>
     </h3>
-    <div class="content">
-      <div class="desc">{@html post.description_html}</div>
-    </div>
+    {#if post.description_html}
+      <div class="content">
+        <div class="desc">{@html post.description_html}</div>
+      </div>
+    {/if}
   </div>
   <div class="card-footer">
     <a

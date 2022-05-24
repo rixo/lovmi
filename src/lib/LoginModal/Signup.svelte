@@ -43,7 +43,12 @@
 <form on:submit|preventDefault={submit}>
   <header class="modal-card-head">
     <p class="modal-card-title">Créer un compte</p>
-    <button class="delete" aria-label="close" on:click|preventDefault={close} />
+    <button
+      type="button"
+      class="delete"
+      aria-label="close"
+      on:click|preventDefault={close}
+    />
   </header>
 
   <section class="modal-card-body">
@@ -92,9 +97,11 @@
   </section>
 
   <footer class="modal-card-foot">
-    <button class="button is-success" disabled={!canSubmit}
+    <button type="submit" class="button is-success" disabled={!canSubmit}
       >Créer mon compte</button
     >
-    <button class="button" on:click|preventDefault={close}>Annuler</button>
+    <button type="button" class="button" on:click|preventDefault={close}
+      >Annuler</button
+    >
   </footer>
 </form>
