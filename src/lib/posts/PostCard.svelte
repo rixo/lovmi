@@ -30,7 +30,7 @@
 <div class="card">
   {#if post.image}
     <div class="card-image p-5">
-      <figure class="image is-4by3">
+      <figure class="image">
         <img src={post.image} alt="Post" />
       </figure>
     </div>
