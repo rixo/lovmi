@@ -1,3 +1,5 @@
+export { default as Fa } from "svelte-fa"
+
 export {
   faCheck,
   faCirclePlus,

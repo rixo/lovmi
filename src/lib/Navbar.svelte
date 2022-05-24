@@ -31,7 +31,7 @@
       <div class="navbar-item">
         <a href="/post" class="button is-primary">
           <span class="icon"><Fa icon={faCirclePlus} /></span>
-          <span><strong>Post</strong></span>
+          <span><strong>Idée</strong></span>
         </a>
       </div>
       <a
@@ -82,17 +82,18 @@
             <div class="buttons">
               <a
                 href
-                class="button is-primary is-outlined"
+                class="button is-success is-outlined"
                 on:click|preventDefault={closeAnd(loginModal.goToSignin)}
               >
                 <strong>Connexion</strong>
               </a>
               <a
                 href
-                class="button is-link is-outlined"
+                class="button is-outlined"
                 on:click|preventDefault={closeAnd(loginModal.goToSignup)}
-                >Créer un compte</a
               >
+                Créer mon compte
+              </a>
             </div>
           </div>
         {/if}
