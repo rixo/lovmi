@@ -2,7 +2,7 @@
   import { scale } from "svelte/transition"
   import Masonry from "svelte-bricks"
 
-  import { Fa, faEye, faEyeSlash } from "$lib/icons"
+  import { Fa, faEye, faEyeSlash, faCirclePlus, faLightbulb } from "$lib/icons"
   import Container from "$lib/ui/Container.svelte"
   import PostCard from "./PostCard.svelte"
 
@@ -32,11 +32,10 @@
 		<a href="/posts/hot" class="level-item">Les mieux notés</a>
 		<a href="/posts/controversial" class="level-item">Contreversés</a>
 	</div> -->
-  <div class="section"><h1 class="title">Idées nouvelles</h1></div>
-
-  <div class="level">
-    <div class="level-left">
-      <div class="level-item">
+  <div class="section">
+    <h1 class="title">Idées fraiches</h1>
+    <div class="subtitle">
+      <div class="buttons">
         <button
           class="button is-info"
           class:is-light={!showAlreadyVoted}
@@ -81,6 +80,21 @@
           />
         </div>
       {/each} -->
+      <div class="card my-5">
+        <div class="card-content">
+          <div class="title">À court d'idée&nbsp;?</div>
+          <div class="subtitle">
+            Fais <strong>bouger</strong> les choses&nbsp;!
+          </div>
+          <div class="card-footer-item">
+            <a href="/post" class="button is-primary is-medium">
+              <!-- <span class="icon"><Fa icon={faCirclePlus} /></span> -->
+              <span><strong>Nouvelle idée</strong></span>
+              <span class="icon"><Fa icon={faLightbulb} /></span>
+            </a>
+          </div>
+        </div>
+      </div>
     {/if}
   </div>
 </div>

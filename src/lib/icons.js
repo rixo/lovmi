@@ -9,6 +9,7 @@ export {
   faEyeSlash,
   faHeart,
   faHeartCrack,
+  faLightbulb,
   faLock,
   faPoop,
   faRotateLeft,

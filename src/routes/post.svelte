@@ -38,7 +38,6 @@
     if (values.hasDrawing) data.image = getPadDataURL()
     if (values.title) data.title = values.title
     if (values.description) data.description = values.description
-    console.log(data)
     posts
       .create(me, data)
       .then(() => {
@@ -61,8 +60,8 @@
   </div>
 </div>
 
-<div class="container">
-  <form on:submit|preventDefault={submit}>
+<div class="container px-5">
+  <form class="container" on:submit|preventDefault={submit}>
     <div class="field">
       <label for="title" class="label">Titre</label>
       <div class="control">
@@ -72,9 +71,8 @@
 
     <div class="field">
       <label for="image" class="label">Illustration</label>
-      <div class="control">
+      <div class="control" id="field-image">
         <DrawingPad
-          id="image"
           bind:getDataURL={getPadDataURL}
           bind:hasData={values.hasDrawing}
         />
@@ -110,6 +108,17 @@
   }
 
   .buttons {
-    margin-top: 2rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    position: sticky;
+    bottom: 0;
+    background: #fff;
+    box-shadow: inset 0 0.0625em 0.125em rgb(10 10 10 / 5%);
+    margin: 0 -1.5rem;
+    padding: 1rem 1.5rem 0.5rem;
+  }
+
+  #field-image > :global(*) {
+    max-height: 45vh;
   }
 </style>
