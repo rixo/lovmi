@@ -1,6 +1,6 @@
 <script>
   import Fa from "svelte-fa"
-  import { faHeartCrack, faHeart } from "@fortawesome/free-solid-svg-icons"
+  import { faHeartCrack, faHeart } from "$lib/icons"
 
   import { getUser } from "$lib/user"
 

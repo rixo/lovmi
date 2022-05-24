@@ -2,12 +2,7 @@
   import { onMount } from "svelte"
   import SignaturePad from "signature_pad"
   import Fa from "svelte-fa"
-  import {
-    faRotateLeft,
-    faRotateRight,
-    faSquare,
-    faXmark,
-  } from "@fortawesome/free-solid-svg-icons"
+  import { faRotateLeft, faRotateRight, faSquare, faXmark } from "$lib/icons"
 
   import { getCroppedDataURL } from "$lib/util/canvas"
 

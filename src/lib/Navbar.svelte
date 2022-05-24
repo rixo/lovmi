@@ -1,10 +1,6 @@
 <script>
   import Fa from "svelte-fa"
-  import {
-    faUser,
-    faDoorOpen,
-    faCirclePlus,
-  } from "@fortawesome/free-solid-svg-icons"
+  import { faUser, faDoorOpen, faCirclePlus } from "$lib/icons"
 
   export let user
 

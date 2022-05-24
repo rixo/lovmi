@@ -2,7 +2,7 @@
   import { onMount } from "svelte"
   import { goto } from "$app/navigation"
   import Fa from "svelte-fa"
-  import { faCheck } from "@fortawesome/free-solid-svg-icons"
+  import { faCheck } from "$lib/icons"
 
   import DrawingPad from "$lib/DrawingPad.svelte"
   import { getUser } from "$lib/user"

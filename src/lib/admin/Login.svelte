@@ -1,6 +1,6 @@
 <script>
   import Fa from "svelte-fa"
-  import { faLock, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons"
+  import { faLock, faEye, faEyeSlash } from "$lib/icons"
 
   import { login } from "$lib/admin"
 
