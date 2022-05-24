@@ -16,7 +16,7 @@
 
   const filterPosts = () => {
     let result = posts
-    if (!showAlreadyVoted) {
+    if (!showAlreadyVoted && $user) {
       result = result.filter((post) => !post.votes[$user.id])
     }
     return result
