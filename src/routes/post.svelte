@@ -102,7 +102,7 @@
   </form>
 </div>
 
-<style>
+<style lang="scss">
   form {
     max-width: 600px;
   }
@@ -112,7 +112,7 @@
     padding-top: 1rem;
     position: sticky;
     bottom: 0;
-    background: #fff;
+    background: $body-background-color;
     box-shadow: inset 0 0.0625em 0.125em rgb(10 10 10 / 5%);
     margin: 0 -1.5rem;
     padding: 1rem 1.5rem 0.5rem;
