@@ -1,4 +1,5 @@
 <script>
+  import "bulma/css/bulma.min.css"
   import "$lib/global.css"
 
   import { getUserContext } from "$lib/user"
