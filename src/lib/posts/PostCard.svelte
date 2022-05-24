@@ -55,7 +55,7 @@
       class:active={downvoted}
       on:click|preventDefault={downvote}
     >
-      <Fa icon={faThumbsDown} class="icon" />
+      <Fa icon={faThumbsDown} class="icon" size="2x" />
     </a>
     <div class="card-footer-item">{post.score}</div>
     <a
@@ -64,7 +64,7 @@
       class:active={upvoted}
       on:click|preventDefault={upvote}
     >
-      <Fa icon={faHeart} class="icon" />
+      <Fa icon={faHeart} class="icon" size="2x" />
     </a>
   </div>
 </div>
