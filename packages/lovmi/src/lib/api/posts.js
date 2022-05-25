@@ -2,7 +2,6 @@ import { browser } from "$app/env"
 import { get, readable, writable } from "svelte/store"
 
 import { render } from "./posts.util"
-import { votes } from "./votes"
 
 export const InMemoryGateway = () => {
   const posts = writable([])
