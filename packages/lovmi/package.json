@@ -23,6 +23,7 @@
     "signature_pad": "^4.0.4",
     "svelte-check": "^2.2.6",
     "svelte-fa": "^2.4.0",
+    "svelte-masonry-1@4fe64413f3dbe599865858449cc4d4c53f1d8ef8": "link:nickyhajal/svelte-masonry-1@4fe64413f3dbe599865858449cc4d4c53f1d8ef8",
     "svelte-preprocess": "^4.10.6",
     "typescript": "~4.6.2"
   },
