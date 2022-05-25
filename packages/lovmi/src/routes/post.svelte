@@ -15,7 +15,7 @@
     $getUser()
       .then((user) => {
         if (destroyed) return
-        if (!user) goTo("/")
+        if (!user) goto("/")
         me = user
       })
       .catch((err) => {
