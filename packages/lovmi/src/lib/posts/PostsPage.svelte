@@ -1,6 +1,6 @@
 <script>
   import { scale } from "svelte/transition"
-  // import Masonry from "svelte-masonry/Masonry.svelte"
+  import Masonry from "$lib/Masonry.svelte"
 
   import { Fa, faEye, faEyeSlash, faCirclePlus, faLightbulb } from "$lib/icons"
   import Container from "$lib/ui/Container.svelte"
@@ -73,18 +73,18 @@
         <p>{error.message}</p>
       </div>
     {:else}
-      <!-- <Masonry {items} bind:refreshLayout gridGap="1.5rem"> -->
-      {#each items as post (post.id)}
-        <div>
-          <PostCard
-            {post}
-            {user}
-            --margin=".5rem"
-            --width="calc(50% - .5rem * 2)"
-          />
-        </div>
-      {/each}
-      <!-- </Masonry> -->
+      <Masonry {items} bind:refreshLayout gridGap="1.5rem">
+        {#each items as post (post.id)}
+          <div>
+            <PostCard
+              {post}
+              {user}
+              --margin=".5rem"
+              --width="calc(50% - .5rem * 2)"
+            />
+          </div>
+        {/each}
+      </Masonry>
       <!-- {#each items as post (post.id)}
         <div class="item" transition:scale>
           <PostCard
