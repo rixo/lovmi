@@ -13,7 +13,6 @@ specifiers:
   sass: ^1.52.1
   signature_pad: ^4.0.4
   svelte: ^3.44.0
-  svelte-bricks: ^0.1.7
   svelte-check: ^2.2.6
   svelte-fa: ^2.4.0
   svelte-preprocess: ^4.10.6
@@ -34,7 +33,6 @@ devDependencies:
   sass: 1.52.1
   signature_pad: 4.0.4
   svelte: 3.48.0
-  svelte-bricks: 0.1.7
   svelte-check: 2.7.1_sass@1.52.1+svelte@3.48.0
   svelte-fa: 2.4.0
   svelte-preprocess: 4.10.6_3941405d512d2a1d35cb09b3c1a7370c
@@ -963,10 +961,6 @@ packages:
   /supports-preserve-symlinks-flag/1.0.0:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
-    dev: true
-
-  /svelte-bricks/0.1.7:
-    resolution: {integrity: sha512-2wJseuhlVYVRoCKJGQuwCySTMsvBVS4dchah6Ecz9RNng0zufx6NxToXc7iGf0QOHjo9wwAsOczRI+Ou2q4gEg==}
     dev: true
 
   /svelte-check/2.7.1_sass@1.52.1+svelte@3.48.0:

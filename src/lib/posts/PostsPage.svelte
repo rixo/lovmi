@@ -1,6 +1,6 @@
 <script>
   import { scale } from "svelte/transition"
-  import Masonry from "svelte-bricks"
+  import Masonry from "svelte-masonry/Masonry.svelte"
 
   import { Fa, faEye, faEyeSlash, faCirclePlus, faLightbulb } from "$lib/icons"
   import Container from "$lib/ui/Container.svelte"
@@ -12,7 +12,9 @@
 
   export let user
 
-  let showAlreadyVoted = false
+  let showAlreadyVoted = true
+
+  let refreshLayout
 
   const filterPosts = () => {
     let result = posts
@@ -23,6 +25,16 @@
   }
 
   $: items = filterPosts(posts, showAlreadyVoted)
+
+  let timeout
+
+  const scheduleRefresh = () => {
+    clearTimeout(timeout)
+    if (!refreshLayout) return
+    setTimeout(refreshLayout, 500)
+  }
+
+  $: items, scheduleRefresh()
 </script>
 
 <div class="container">
@@ -37,8 +49,7 @@
     <div class="subtitle">
       <div class="buttons">
         <button
-          class="button is-info"
-          class:is-light={!showAlreadyVoted}
+          class="button is-info is-light"
           on:click={(e) => {
             showAlreadyVoted = !showAlreadyVoted
             e.target.blur()
@@ -62,13 +73,17 @@
         <p>{error.message}</p>
       </div>
     {:else}
-      <Masonry {items} let:item={post} animate={true}>
-        <PostCard
-          {post}
-          {user}
-          --margin=".5rem"
-          --width="calc(50% - .5rem * 2)"
-        />
+      <Masonry {items} bind:refreshLayout gridGap="1.5rem">
+        {#each items as post (post.id)}
+          <div>
+            <PostCard
+              {post}
+              {user}
+              --margin=".5rem"
+              --width="calc(50% - .5rem * 2)"
+            />
+          </div>
+        {/each}
       </Masonry>
       <!-- {#each items as post (post.id)}
         <div class="item" transition:scale>
@@ -81,7 +96,7 @@
         </div>
       {/each} -->
       {#if items.length === 0}
-        <div class="card my-5 cta" transition:scale>
+        <div class="card my-5 cta" in:scale>
           <div class="card-content">
             <div class="title">À court d'idée&nbsp;?</div>
             <div class="subtitle">

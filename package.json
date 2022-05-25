@@ -23,7 +23,6 @@
     "sass": "^1.52.1",
     "signature_pad": "^4.0.4",
     "svelte": "^3.44.0",
-    "svelte-bricks": "^0.1.7",
     "svelte-check": "^2.2.6",
     "svelte-fa": "^2.4.0",
     "svelte-preprocess": "^4.10.6",
