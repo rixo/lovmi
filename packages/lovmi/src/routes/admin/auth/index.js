@@ -57,7 +57,7 @@ export async function post({ request }) {
   return {
     status: 401,
     body: {
-      message: `Mot de passe incorrect (${ADMIN_PASSWORD})`,
+      message: `Mot de passe incorrect`,
     },
   }
 }
