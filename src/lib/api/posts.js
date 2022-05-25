@@ -1,14 +1,8 @@
 import { browser } from "$app/env"
 import { get, readable, writable } from "svelte/store"
 
-const render = (text) => {
-  return text
-    .split("\n\n")
-    .map((line) => line.trim())
-    .filter(Boolean)
-    .map((line) => `<p>${line}</p>`)
-    .join("")
-}
+import { render } from "./posts.util"
+import { votes } from "./votes"
 
 export const InMemoryGateway = () => {
   const posts = writable([])
@@ -81,7 +75,7 @@ export const InMemoryGateway = () => {
 }
 
 class Post {
-  id = 0
+  // id = 0
   author = ""
   title = ""
   description = ""
@@ -89,6 +83,10 @@ class Post {
   image = ""
   votes = {}
   score = 0
+
+  get id() {
+    return this._id
+  }
 
   constructor(data, onChange) {
     Object.assign(this, data)
@@ -149,26 +147,6 @@ export const PostsApi = (gateway) => {
     } else {
       return
     }
-
-    // gateway
-    //   .getAll()
-    //   .then(({ posts }) => {
-    //     _posts = posts.map(
-    //       (post) =>
-    //         new Post(post, () => {
-    //           set(_posts)
-    //         })
-    //     )
-    //     set(_posts)
-    //     loading.set(false)
-    //   })
-    //   .catch((err) => {
-    //     console.error("Failed to load post", err)
-    //     error.set(
-    //       "Une erreur est survenue. Veuillez réessayer quand vous aurez plus de chance."
-    //     )
-    //     loading.set(false)
-    //   })
   })
 
   const create = async (user, data) =>

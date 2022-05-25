@@ -21,6 +21,9 @@ const config = {
     adapter: adapter(),
     vite: {
       plugins: [LoadSecrets()],
+      optimizeDeps: {
+        ignore: ["@svouch/pouchdb"],
+      },
     },
   },
 }
