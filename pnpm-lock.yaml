@@ -1,44 +1,48 @@
 lockfileVersion: 5.3
 
-specifiers:
-  '@fortawesome/free-solid-svg-icons': ^6.1.1
-  '@sveltejs/adapter-auto': 1.0.0-next.45
-  '@sveltejs/kit': 1.0.0-next.341
-  '@svouch/pouchdb': ^0.0.1-0
-  bulma: ^0.9.4
-  clsx: ^1.1.1
-  dotenv: ^16.0.1
-  jsonwebtoken: ^8.5.1
-  prettier: ^2.5.1
-  prettier-plugin-svelte: ^2.5.0
-  sass: ^1.52.1
-  signature_pad: ^4.0.4
-  svelte: ^3.44.0
-  svelte-check: ^2.2.6
-  svelte-fa: ^2.4.0
-  svelte-preprocess: ^4.10.6
-  typescript: ~4.6.2
+importers:
 
-dependencies:
-  dotenv: 16.0.1
-  jsonwebtoken: 8.5.1
+  .:
+    specifiers: {}
 
-devDependencies:
-  '@fortawesome/free-solid-svg-icons': 6.1.1
-  '@sveltejs/adapter-auto': 1.0.0-next.45
-  '@sveltejs/kit': 1.0.0-next.341_sass@1.52.1+svelte@3.48.0
-  '@svouch/pouchdb': link:../../svouch/pouchdb
-  bulma: 0.9.4
-  clsx: 1.1.1
-  prettier: 2.6.2
-  prettier-plugin-svelte: 2.7.0_prettier@2.6.2+svelte@3.48.0
-  sass: 1.52.1
-  signature_pad: 4.0.4
-  svelte: 3.48.0
-  svelte-check: 2.7.1_sass@1.52.1+svelte@3.48.0
-  svelte-fa: 2.4.0
-  svelte-preprocess: 4.10.6_3941405d512d2a1d35cb09b3c1a7370c
-  typescript: 4.6.4
+  packages/lovmi:
+    specifiers:
+      '@fortawesome/free-solid-svg-icons': ^6.1.1
+      '@sveltejs/adapter-auto': 1.0.0-next.45
+      '@sveltejs/kit': 1.0.0-next.341
+      '@svouch/pouchdb': ^0.0.1-0
+      bulma: ^0.9.4
+      clsx: ^1.1.1
+      dotenv: ^16.0.1
+      jsonwebtoken: ^8.5.1
+      prettier: ^2.5.1
+      prettier-plugin-svelte: ^2.5.0
+      sass: ^1.52.1
+      signature_pad: ^4.0.4
+      svelte: ^3.44.0
+      svelte-check: ^2.2.6
+      svelte-fa: ^2.4.0
+      svelte-preprocess: ^4.10.6
+      typescript: ~4.6.2
+    dependencies:
+      dotenv: 16.0.1
+      jsonwebtoken: 8.5.1
+    devDependencies:
+      '@fortawesome/free-solid-svg-icons': 6.1.1
+      '@sveltejs/adapter-auto': 1.0.0-next.45
+      '@sveltejs/kit': 1.0.0-next.341_sass@1.52.1+svelte@3.48.0
+      '@svouch/pouchdb': 0.0.1-0
+      bulma: 0.9.4
+      clsx: 1.1.1
+      prettier: 2.6.2
+      prettier-plugin-svelte: 2.7.0_prettier@2.6.2+svelte@3.48.0
+      sass: 1.52.1
+      signature_pad: 4.0.4
+      svelte: 3.48.0
+      svelte-check: 2.7.1_sass@1.52.1+svelte@3.48.0
+      svelte-fa: 2.4.0
+      svelte-preprocess: 4.10.6_3941405d512d2a1d35cb09b3c1a7370c
+      typescript: 4.6.4
 
 packages:
 
@@ -176,6 +180,10 @@ packages:
       vite: 2.9.9_sass@1.52.1
     transitivePeerDependencies:
       - supports-color
+    dev: true
+
+  /@svouch/pouchdb/0.0.1-0:
+    resolution: {integrity: sha512-DwvOwehrcgfibpZIj00T0l6oe24pmzEKWcA1/NgzHxR/H83JEau1yEP0psIu6g1ijLKGRRFsRvSdya+5oXsc6A==}
     dev: true
 
   /@types/node/17.0.35:
