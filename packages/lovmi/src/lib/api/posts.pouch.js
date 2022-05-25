@@ -5,10 +5,18 @@ import { render } from "./posts.util"
 export const PouchDBGateway = () => {
   let db
 
+  // const getDb = async () => {
+  //   if (!db) {
+  //     const { default: PouchDB } = await import("$lib/pouch")
+  //     db = new PouchDB("lovmi.posts")
+  //   }
+  //   return db
+  // }
+
   const getDb = async () => {
     if (!db) {
       const { default: PouchDB } = await import("$lib/pouch")
-      db = new PouchDB("lovmi.posts")
+      db = new PouchDB(import.meta.env.VITE_POUCHDB_POSTS)
     }
     return db
   }

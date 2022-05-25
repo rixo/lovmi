@@ -14,7 +14,7 @@ function LoadSecrets() {
 const config = {
   preprocess: preprocess({
     scss: {
-      prependData: '@import "src/bulma.scss";',
+      prependData: '@import "src/vars.scss";',
     },
   }),
   kit: {
