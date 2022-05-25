@@ -37,7 +37,10 @@
   <div class="content block">
     <p>
       Pas encore de compte&nbsp;?
-      <a href on:click|preventDefault={goToSignup} class="has-text-primary"
+      <a
+        href
+        on:click|preventDefault={goToSignup}
+        class="has-text-primary has-text-weight-bold is-link"
         >Entrer dans le game</a
       > 🕶
     </p>
