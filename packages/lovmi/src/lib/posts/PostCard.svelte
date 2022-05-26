@@ -49,23 +49,35 @@
     {/if}
   </div>
   <div class="card-footer">
-    <a
-      href
-      class="card-footer-item negative"
-      class:active={downvoted}
-      on:click|preventDefault={downvote}
-    >
-      <Fa icon={faThumbsDown} class="icon" size="2x" />
-    </a>
-    <div class="card-footer-item">{post.score}</div>
-    <a
-      href
-      class="card-footer-item positive"
-      class:active={upvoted}
-      on:click|preventDefault={upvote}
-    >
-      <Fa icon={faHeart} class="icon" size="2x" />
-    </a>
+    {#if post.author !== $user.id}
+      <a
+        href
+        class="card-footer-item negative"
+        class:active={downvoted}
+        on:click|preventDefault={downvote}
+      >
+        <Fa icon={faThumbsDown} class="icon" size="2x" />
+      </a>
+      <div
+        class="card-footer-item is-size-3 has-text-weight-bold has-text-primary"
+      >
+        {post.score}
+      </div>
+      <a
+        href
+        class="card-footer-item positive"
+        class:active={upvoted}
+        on:click|preventDefault={upvote}
+      >
+        <Fa icon={faHeart} class="icon" size="2x" />
+      </a>
+    {:else}
+      <div
+        class="card-footer-item is-size-3 has-text-weight-bold has-text-primary"
+      >
+        {post.score}
+      </div>
+    {/if}
   </div>
 </div>
 
