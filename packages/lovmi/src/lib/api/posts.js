@@ -87,19 +87,22 @@ class Post {
     return this._id
   }
 
-  constructor(data, onChange) {
+  constructor(data, gateway, onChange) {
     Object.assign(this, data)
+    this.gateway = gateway
     this.notify = onChange
   }
 
+  vote(by, value) {
+    this.gateway.castVote(by, this._id, value)
+  }
+
   upvote(by) {
-    this.votes[by] = this.votes[by] > 0 ? 0 : 1
-    this.calcVotes()
+    this.vote(by, 1)
   }
 
   downvote(by) {
-    this.votes[by] = this.votes[by] < 0 ? 0 : -1
-    this.calcVotes()
+    this.vote(by, -1)
   }
 
   isUpvotedBy(userId) {
@@ -136,7 +139,7 @@ export const PostsApi = (gateway) => {
       return gateway.subscribe((posts) => {
         _posts = posts.map(
           (post) =>
-            new Post(post, () => {
+            new Post(post, gateway, () => {
               set(_posts)
             })
         )

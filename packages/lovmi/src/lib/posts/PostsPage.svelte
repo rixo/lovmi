@@ -5,6 +5,7 @@
   import { Fa, faEye, faEyeSlash, faCirclePlus, faLightbulb } from "$lib/icons"
   import Container from "$lib/ui/Container.svelte"
   import PostCard from "./PostCard.svelte"
+  import PostsList from "./PostsList.svelte"
 
   export let posts
   export let loading = false
@@ -73,7 +74,8 @@
         <p>{error.message}</p>
       </div>
     {:else}
-      <Masonry {items} bind:refreshLayout gridGap="1.5rem">
+      <PostsList {user} {loading} {error} {posts} />
+      <!-- <Masonry {items} bind:refreshLayout gridGap="1.5rem">
         {#each items as post (post.id)}
           <div>
             <PostCard
@@ -84,7 +86,7 @@
             />
           </div>
         {/each}
-      </Masonry>
+      </Masonry> -->
       <!-- {#each items as post (post.id)}
         <div class="item" transition:scale>
           <PostCard

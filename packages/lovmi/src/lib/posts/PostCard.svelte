@@ -12,19 +12,18 @@
     $getUser()
       .then((user) => {
         if (!user) return
-        if (value > 0) post.upvote(user.id)
-        else post.downvote(user.id)
+        post.vote(user.id, value)
       })
       .catch((err) => {
         console.error("Failed to get user", err)
       })
   }
 
-  const upvote = () => vote(1)
-  const downvote = () => vote(-1)
-
   $: upvoted = post.isUpvotedBy($user?.id)
   $: downvoted = post.isDownvotedBy($user?.id)
+
+  const upvote = () => vote(upvoted ? 0 : 1)
+  const downvote = () => vote(downvoted ? 0 : -1)
 </script>
 
 <div class="card">
@@ -49,7 +48,7 @@
     {/if}
   </div>
   <div class="card-footer">
-    {#if post.author !== $user.id}
+    {#if post.author !== $user?.id}
       <a
         href
         class="card-footer-item negative"
