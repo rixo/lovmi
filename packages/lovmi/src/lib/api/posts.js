@@ -73,6 +73,8 @@ export const InMemoryGateway = () => {
   }
 }
 
+const last = (arr) => arr[arr.length - 1]
+
 class Post {
   // id = 0
   author = ""
@@ -85,6 +87,10 @@ class Post {
 
   get id() {
     return this._id
+  }
+
+  get time() {
+    return last(this._id.split("/"))
   }
 
   constructor(data, gateway, onChange) {
