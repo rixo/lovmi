@@ -1,27 +1,67 @@
 import { browser } from "$app/env"
-import { derived } from "svelte/store"
 
-import { readable } from "$lib/util/store"
+import { readable, derived } from "$lib/util/store"
 
 import { getUserAuth } from "$lib/user"
+import { getAppSettings } from "$lib/settings"
 
 import { render } from "./posts.util"
 
+const liveFind = (
+  db$,
+  {
+    prefix,
+    selector = {
+      _id: {
+        $gt: prefix,
+        $lt: prefix + "\uffff",
+      },
+    },
+  }
+) =>
+  derived(
+    db$,
+    async (db, set) => {
+      if (!db) return
+      try {
+        const feed = db.liveFind({
+          selector,
+          aggregate: true,
+        })
+        feed.on("update", (update, aggregate) => {
+          // update.doc.id = update.doc._id
+          set(aggregate)
+        })
+        return () => {
+          feed.cancel()
+        }
+      } catch (err) {
+        console.error("Failed to init pouch live find", err)
+      }
+    },
+    []
+  )
+
 export const PouchDBGateway = () => {
-  let db
+  const dbHost = import.meta.env.VITE_DB_HOST
 
-  // const getDb = async () => {
-  //   if (!db) {
-  //     const { default: PouchDB } = await import("$lib/pouch")
-  //     db = new PouchDB("lovmi.posts")
-  //   }
-  //   return db
-  // }
+  const settingsDb = readable(null, async (set) => {
+    const { default: PouchDB } = await import("$lib/pouch")
+    set(new PouchDB(dbHost + "/lovmi-settings"))
+  })
 
-  const getDb = async () => {
-    if (!db) {
-      const { default: PouchDB } = await import("$lib/pouch")
-      db = new PouchDB(import.meta.env.VITE_POUCHDB_POSTS, {
+  const settings = derived(
+    liveFind(settingsDb, { selector: {} }),
+    ($docs) => Object.fromEntries($docs.map((doc) => [doc._id, doc])),
+    {}
+  )
+
+  const postsDb$ = derived(settings, async ($settings, set) => {
+    const { default: PouchDB } = await import("$lib/pouch")
+    if (!$settings["lovmi-session"]) return
+    const dbName = dbHost + "/" + $settings["lovmi-session"].current_posts_db
+    set(
+      new PouchDB(dbName, {
         fetch(url, opts) {
           const auth = getUserAuth()
           if (auth) {
@@ -30,57 +70,21 @@ export const PouchDBGateway = () => {
           return fetch(url, opts)
         },
       })
-    }
-    return db
-  }
-
-  const posts = readable([], async (set) => {
-    try {
-      const db = await getDb()
-      const feed = db.liveFind({
-        selector: {
-          _id: {
-            $gt: "posts/",
-            $lt: "posts/\uffff",
-          },
-        },
-        aggregate: true,
-      })
-      feed.on("update", (update, aggregate) => {
-        // update.doc.id = update.doc._id
-        set(aggregate)
-      })
-      return () => {
-        feed.cancel()
-      }
-    } catch (err) {
-      console.error("Failed to init pouch live find for posts", err)
-    }
+    )
   })
 
-  const votes = readable([], async (set) => {
-    try {
-      const db = await getDb()
-      const feed = db.liveFind({
-        selector: {
-          _id: {
-            $gt: "votes/",
-            $lt: "votes/\uffff",
-          },
-        },
-        aggregate: true,
+  const getPostsDb = async () =>
+    new Promise((resolve) => {
+      const unsubscribe = postsDb$.subscribe((db) => {
+        if (!db) return
+        setTimeout(() => unsubscribe())
+        resolve(db)
       })
-      feed.on("update", (update, aggregate) => {
-        // update.doc.id = update.doc._id
-        set(aggregate)
-      })
-      return () => {
-        feed.cancel()
-      }
-    } catch (err) {
-      console.error("Failed to init pouch live find for posts", err)
-    }
-  })
+    })
+
+  const posts = liveFind(postsDb$, { prefix: "posts/" })
+
+  const votes = liveFind(postsDb$, { prefix: "votes/" })
 
   const postsWithVotes = derived([posts, votes], ([$posts, $votes]) => {
     const votesByPosts = {}
@@ -109,16 +113,10 @@ export const PouchDBGateway = () => {
   // keep open
   if (browser) {
     postsWithVotes.subscribe(() => {})
-    // posts.subscribe((x) => {
-    //   console.log("posts", x)
-    // })
-    // votes.subscribe((x) => {
-    //   console.log("votes", x)
-    // })
   }
 
   const add = async (post) => {
-    const db = await getDb()
+    const db = await getPostsDb()
     const record = {
       ...post,
       _id: `posts/${post.author}/${new Date().getTime()}`,
@@ -130,7 +128,7 @@ export const PouchDBGateway = () => {
   }
 
   const castVote = async (userId, postId, value) => {
-    const db = await getDb()
+    const db = await getPostsDb()
     const id = `votes/${userId}/${postId}`
     const record = {
       _id: id,
