@@ -3,6 +3,7 @@
   import { goto } from "$app/navigation"
   import Fa from "svelte-fa"
   import { faCheck } from "$lib/icons"
+  import { scrollToTop } from "$lib/util/scrollIntoView"
 
   import DrawingPad from "$lib/DrawingPad.svelte"
   import { getUser } from "$lib/user"
@@ -47,6 +48,11 @@
         console.error("Failed to create post", err)
       })
   }
+
+  const scrollIntoView = (e) => {
+    scrollToTop(e.target)
+    // e.target.scrollIntoViewIfNeeded()
+  }
 </script>
 
 <div class="section">
@@ -65,16 +71,23 @@
     <div class="field">
       <label for="title" class="label">Titre</label>
       <div class="control">
-        <input id="title" bind:value={values.title} class="input" type="text" />
+        <input
+          id="title"
+          bind:value={values.title}
+          class="input"
+          type="text"
+          on:focus={scrollIntoView}
+        />
       </div>
     </div>
 
     <div class="field">
-      <label for="image" class="label">Illustration</label>
+      <label for="field-image" class="label">Illustration</label>
       <div class="control" id="field-image">
         <DrawingPad
           bind:getDataURL={getPadDataURL}
           bind:hasData={values.hasDrawing}
+          on:focus={scrollIntoView}
         />
       </div>
     </div>
@@ -86,6 +99,7 @@
           id="description"
           class="textarea"
           bind:value={values.description}
+          on:focus={scrollIntoView}
         />
       </div>
     </div>
@@ -118,7 +132,7 @@
     padding: 1rem 1.5rem 0.5rem;
   }
 
-  #field-image > :global(*) {
+  /* #field-image > :global(*) {
     max-height: 45vh;
-  }
+  } */
 </style>
