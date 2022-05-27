@@ -10,9 +10,19 @@
   export let loading = false
   export let error = ""
 
+  export let selector
+
   export let user
 
-  $: items = posts
+  const process = () => {
+    let result = posts
+    if (selector) {
+      result = selector(posts)
+    }
+    return result
+  }
+
+  $: items = process(posts, selector)
 
   let refreshLayout
 </script>
@@ -29,12 +39,7 @@
     <Masonry {items} bind:refreshLayout gridGap="1.5rem">
       {#each items as post (post.id)}
         <div>
-          <PostCard
-            {post}
-            {user}
-            --margin=".5rem"
-            --width="calc(50% - .5rem * 2)"
-          />
+          <PostCard {post} {user} />
         </div>
       {/each}
     </Masonry>
