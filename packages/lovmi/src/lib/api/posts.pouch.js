@@ -3,7 +3,6 @@ import { browser } from "$app/env"
 import { readable, derived } from "$lib/util/store"
 
 import { getUserAuth } from "$lib/user"
-import { getAppSettings } from "$lib/settings"
 
 import { render } from "./posts.util"
 
