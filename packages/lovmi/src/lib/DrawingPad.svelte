@@ -121,27 +121,43 @@
 
 <div class="block">
   <div class="buttons">
+    <input
+      type="text"
+      style="width: 0; height: 0; opacity: 0; position: absolute; margin-top: -165px; z-index: -1;"
+      on:focus
+      on:focus={(e) => {
+        e.target.blur()
+        // canvas.focus()
+      }}
+    />
+
     <button
+      type="button"
       class="button is-small has-icon"
       on:click|preventDefault={undo}
       title="Annuler"
+      tabindex="-1"
     >
       <Fa class="icon" icon={faRotateLeft} />
     </button>
 
     <button
+      type="button"
       class="button is-small has-icon"
       on:click|preventDefault={redo}
       disabled={redoStack.length < 1}
       title="Refaire"
+      tabindex="-1"
     >
       <Fa class="icon" icon={faRotateRight} />
     </button>
 
     <button
+      type="button"
       class="button is-small has-icon"
       on:click|preventDefault={clear}
-      title="Annuler"
+      title="Tout effacer"
+      tabindex="-1"
     >
       <Fa class="icon" icon={faXmark} />
     </button>
@@ -150,10 +166,12 @@
 
     {#each colors as color}
       <button
+        type="button"
         class="button is-small has-icon"
         class:is-outlined={true}
         on:click|preventDefault={() => setColor(color)}
         title="Annuler"
+        tabindex="-1"
       >
         <Fa class="icon" primaryColor={color} icon={faSquare} />
       </button>
