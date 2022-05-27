@@ -91,4 +91,10 @@
     color: hsl(204, 86%, 53%);
     color: hsl(345, 86%, 53%);
   }
+
+  .image img {
+    max-height: 33rem;
+    width: auto;
+    margin: auto;
+  }
 </style>
