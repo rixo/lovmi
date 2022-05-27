@@ -46,6 +46,11 @@
         >&nbsp;! 🔥🔥🔥
       </p>
     </div>
+    {#if error}
+      <div class="content block">
+        <p class="has-text-danger">{error}</p>
+      </div>
+    {/if}
     <div class="field">
       <label for="login" class="label">Identifiant</label>
       <div class="control">
@@ -79,9 +84,6 @@
         > 🕶
       </p>
     </div>
-    {#if error}
-      <p class="has-text-danger">{error}</p>
-    {/if}
   </section>
 
   <footer class="modal-card-foot">
