@@ -7,8 +7,9 @@ export const hotIdeas = (ideas) =>
     })
     .slice(0, 3)
 
-export const lastIdeasFirst = [...ideas].sort((a, b) => {
-  return b.time - a.time
-})
+export const lastIdeasFirst = (ideas) =>
+  [...ideas].sort((a, b) => {
+    return b.time - a.time
+  })
 
 export const lastIdea = (ideas) => [ideas[0]].filter(Boolean)
