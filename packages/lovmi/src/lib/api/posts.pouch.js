@@ -12,10 +12,6 @@ export const PouchDBGateway = () => {
 
   const loading = writable(true)
 
-  loading.subscribe((x) => {
-    console.log(x)
-  })
-
   const db$ = readable(null, async (set) => {
     const { default: PouchDB } = await import("$lib/pouch")
     set(
