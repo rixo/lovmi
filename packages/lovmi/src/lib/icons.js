@@ -7,6 +7,7 @@ export {
   faExclamationTriangle,
   faEye,
   faEyeSlash,
+  faGavel,
   faHeart,
   faHeartCrack,
   faLightbulb,
