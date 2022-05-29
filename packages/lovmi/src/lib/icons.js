@@ -18,6 +18,7 @@ export {
   faThumbsDown,
   faThumbsUp,
   faTriangleExclamation,
+  faTrophy,
   faUser,
   faXmark,
 } from "../../vendor/fa.js"

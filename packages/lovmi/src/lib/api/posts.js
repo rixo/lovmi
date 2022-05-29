@@ -1,5 +1,5 @@
 import { browser } from "$app/env"
-import { get, readable, writable } from "svelte/store"
+import { get, readable, writable, derived } from "svelte/store"
 
 import { render } from "./posts.util"
 
@@ -164,5 +164,61 @@ export const PostsApi = (gateway) => {
       author: user.id,
     })
 
-  return { posts, loading: gateway.loading, error, create }
+  const currentTopUsers = derived(
+    posts,
+    ($posts) => {
+      const stats = {}
+
+      const getStat = (user) => {
+        if (!stats[user]) {
+          stats[user] = {
+            userId: user,
+            posts: 0,
+            votes: 0,
+            upvotes: 0,
+            downvotes: 0,
+            score: 0,
+          }
+        }
+        return stats[user]
+      }
+
+      for (const post of $posts) {
+        const user = post.author
+        const stat = getStat(user)
+        stat.posts++
+        stat.score += post.score
+        if (post.votes) {
+          for (const [voter, value] of Object.entries(post.votes)) {
+            if (voter === "_score") continue
+            const voterStat = getStat(voter)
+            voterStat.votes++
+            if (value > 0) {
+              stat.upvotes++
+            } else if (value < 0) {
+              stat.downvotes++
+            }
+          }
+        }
+      }
+
+      const lines = Object.values(stats)
+        .map((stat) => {
+          stat.href = `/profile/${stat.userId}`
+          stat.total = stat.posts * 5 + stat.votes * 1 + stat.score * 10
+          return stat
+        })
+        .sort((a, b) => b.total - a.total)
+        .map((stat, i) => {
+          stat.href = `/profile/${stat.userId}`
+          stat.pos = i + 1
+          return stat
+        })
+
+      return lines
+    },
+    []
+  )
+
+  return { posts, loading: gateway.loading, error, create, currentTopUsers }
 }

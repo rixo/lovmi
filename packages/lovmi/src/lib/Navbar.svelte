@@ -1,6 +1,6 @@
 <script>
   import Fa from "svelte-fa"
-  import { faUser, faDoorOpen, faCirclePlus } from "$lib/icons"
+  import { faUser, faDoorOpen, faCirclePlus, faTrophy } from "$lib/icons"
 
   export let user
 
@@ -39,6 +39,12 @@
         <a href="/post" class="button is-primary">
           <span class="icon"><Fa icon={faCirclePlus} /></span>
           <span><strong>Idée</strong></span>
+        </a>
+      </div>
+      <div class="navbar-item">
+        <a href="/leaderboard" class="button is-link is-inverted">
+          <span class="icon"><Fa icon={faTrophy} /></span>
+          <span>Classement</span>
         </a>
       </div>
 
