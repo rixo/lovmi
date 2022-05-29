@@ -10,6 +10,12 @@ import { render } from "./posts.util"
 export const PouchDBGateway = () => {
   const dbHost = import.meta.env.VITE_DB_HOST
 
+  const loading = writable(true)
+
+  loading.subscribe((x) => {
+    console.log(x)
+  })
+
   const db$ = readable(null, async (set) => {
     const { default: PouchDB } = await import("$lib/pouch")
     set(
@@ -57,8 +63,11 @@ export const PouchDBGateway = () => {
   const allDocs = derived(
     [db$, era$],
     async ([db, $era], set) => {
+      loading.set(true)
+
       if (!db) return
       if ($era == null) return
+
       try {
         const feed = db.liveFind({
           selector: {
@@ -79,13 +88,18 @@ export const PouchDBGateway = () => {
           },
           aggregate: true,
         })
+
         feed.on("update", (update, aggregate) => {
           if (update.doc._id === "$settings") {
             era$.set(update.doc.current_era)
           }
-          // update.doc.id = update.doc._id
           set(aggregate)
         })
+
+        feed.then(() => {
+          loading.set(false)
+        })
+
         return () => {
           feed.cancel()
         }
@@ -112,9 +126,7 @@ export const PouchDBGateway = () => {
       const userId = match[1]
       const postId = match[2]
       if (!votesByPosts[postId]) {
-        votesByPosts[postId] = {
-          _score: 0,
-        }
+        votesByPosts[postId] = { _score: 0 }
       }
       const value = vote.value > 0 ? 1 : vote.value < 0 ? -1 : 0
       votesByPosts[postId][userId] = value
@@ -169,6 +181,7 @@ export const PouchDBGateway = () => {
 
   return {
     subscribe: postsWithVotes.subscribe,
+    loading,
     add,
     castVote,
   }

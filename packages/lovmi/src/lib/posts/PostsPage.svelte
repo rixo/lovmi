@@ -1,4 +1,5 @@
 <script>
+  import "/node_modules/bulma-pageloader"
   import { scale } from "svelte/transition"
   import Masonry from "$lib/Masonry.svelte"
 
@@ -38,6 +39,10 @@
 
   $: items, scheduleRefresh()
 </script>
+
+<div class="pageloader is-bottom-to-top is-danger" class:is-active={loading}>
+  <span class="title">Preparing awesomeness</span>
+</div>
 
 <div class="container">
   <!-- <div class="level">

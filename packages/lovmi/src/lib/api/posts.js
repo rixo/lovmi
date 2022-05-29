@@ -68,6 +68,7 @@ export const InMemoryGateway = () => {
 
   return {
     subscribe: posts.subscribe,
+    loading: readable(true),
     getAll,
     add,
   }
@@ -163,5 +164,5 @@ export const PostsApi = (gateway) => {
       author: user.id,
     })
 
-  return { posts, loading, error, create }
+  return { posts, loading: gateway.loading, error, create }
 }
