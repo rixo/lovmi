@@ -17,6 +17,9 @@ const config = {
       prependData: '@import "src/vars.scss";',
     },
   }),
+  hot: {
+    optimistic: false,
+  },
   kit: {
     adapter: adapter(),
     vite: {
