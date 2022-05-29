@@ -1,6 +1,13 @@
 <script>
   import Fa from "svelte-fa"
-  import { faUser, faDoorOpen, faCirclePlus, faTrophy } from "$lib/icons"
+  import {
+    faUser,
+    faDoorOpen,
+    faCirclePlus,
+    faTrophy,
+    faGavel,
+  } from "$lib/icons"
+  import { isAdmin } from "$lib/admin"
 
   export let user
 
@@ -72,6 +79,13 @@
         <a href="/posts/controversial" class="navbar-item">Contreversés</a>
       </div> -->
       <div class="navbar-end">
+        {#if $isAdmin}
+          <a class="navbar-item" href="/admin">
+            <Fa icon={faGavel} class="icon" />
+            <span>Admin</span>
+          </a>
+        {/if}
+
         {#if $userLoading}
           <span />
         {:else if $user}
