@@ -50,7 +50,7 @@
     <h1 class="title">Idées fraiches</h1>
     <div class="subtitle">
       <p>
-        Les dernières idées <strong>en vogue</strong> qui viennent d'arriver
+        Les idées les <strong>plus récentes</strong>.
       </p>
     </div>
   </div>
@@ -60,7 +60,7 @@
   <div class="section">
     <h1 class="title">Idées hot</h1>
     <div class="subtitle">
-      <p>Les idées populaires <strong>qui plaisent</strong>.</p>
+      <p>Les idées les <strong>mieux notées</strong>.</p>
     </div>
   </div>
 
@@ -86,7 +86,7 @@
       <div class="card-footer-item">
         <a href="/post" class="button is-primary is-medium">
           <!-- <span class="icon"><Fa icon={faCirclePlus} /></span> -->
-          <span><strong>Propose une idée nouvelle</strong></span>
+          <span><strong>Propose une idée neuve</strong></span>
           <span class="icon"><Fa icon={faLightbulb} /></span>
         </a>
       </div>
