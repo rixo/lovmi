@@ -59,7 +59,6 @@ export const PouchDBGateway = () => {
     async ([db, $era], set) => {
       if (!db) return
       if ($era == null) return
-      console.log(">>", $era)
       try {
         const feed = db.liveFind({
           selector: {

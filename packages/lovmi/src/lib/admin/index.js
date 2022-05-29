@@ -51,6 +51,15 @@ const setToken = (token) => {
   localStorage.setItem(STORAGE_TOKEN, token)
 }
 
+export const getAuthToken = async () =>
+  new Promise((resolve) => {
+    const unsubscribe = auth.subscribe((value) => {
+      if (!value?.token) return
+      setTimeout(() => unsubscribe())
+      resolve("Bearer " + value.token)
+    })
+  })
+
 export const login = async ({ password }) => {
   const token = await verify({ password })
   if (!token) return

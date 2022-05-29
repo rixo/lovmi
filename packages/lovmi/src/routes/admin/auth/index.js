@@ -1,33 +1,6 @@
-import jwt from "jsonwebtoken"
+import { validateToken, generateAdminToken } from "$lib/admin/auth"
 
-const { ADMIN_PASSWORD, JWT_SECRET } = process.env
-
-const SCOPE = "lovmi.admin"
-
-const generateAdminToken = async () => {
-  return new Promise((resolve, reject) => {
-    jwt.sign(
-      {},
-      JWT_SECRET,
-      {
-        expiresIn: "1d",
-        subject: SCOPE,
-      },
-      (err, token) => {
-        if (err) reject(err)
-        else resolve(token)
-      }
-    )
-  })
-}
-
-const validateToken = async (token) =>
-  new Promise((resolve, reject) => {
-    jwt.verify(token, JWT_SECRET, { subject: SCOPE }, (err, decoded) => {
-      if (err) resolve(false)
-      else resolve(!!decoded)
-    })
-  })
+const { ADMIN_PASSWORD } = process.env
 
 export async function post({ request }) {
   const data = await request.json()
