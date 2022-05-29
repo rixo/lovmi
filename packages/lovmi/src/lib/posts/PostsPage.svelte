@@ -80,7 +80,7 @@
 
   <PostsList {user} {loading} {error} {posts} selector={lastIdeasFirst} />
 
-  <div class="card my-5 cta" in:scale>
+  <div class="card my-6 cta" in:scale>
     <div class="card-content">
       <div class="title">À court d'idée&nbsp;?</div>
       <div class="subtitle">
