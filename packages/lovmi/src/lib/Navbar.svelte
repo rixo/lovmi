@@ -14,6 +14,10 @@
 
   let menuActive = false
 
+  const closeMenu = () => {
+    menuActive = false
+  }
+
   const closeAnd = (action) => () => {
     menuActive = false
     action()
@@ -66,12 +70,12 @@
           <span />
         {:else if $user}
           <div class="navbar-item has-dropdown is-hoverable">
-            <a class="navbar-link" href="/my-account">
+            <a class="navbar-link" href="/my-account" on:click={closeMenu}>
               <Fa icon={faUser} class="icon" />
               <span>{$user.name}</span>
             </a>
             <div class="navbar-dropdown">
-              <a class="navbar-item" href="/account">
+              <a class="navbar-item" href="/account" on:click={closeMenu}>
                 <!-- <Fa icon={faDoorOpen} class="icon" /> -->
                 <span>Mon compte</span>
               </a>
