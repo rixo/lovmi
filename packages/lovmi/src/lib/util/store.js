@@ -1,8 +1,8 @@
 import { readable, derived } from "svelte/store"
 
-const asyncLifecycle =
-  (lifecycle) =>
-  (...args) => {
+const asyncLifecycle = (lifecycle) => {
+  if (!lifecycle) return
+  return (...args) => {
     let stopped
     let stop
 
@@ -28,6 +28,7 @@ const asyncLifecycle =
       return ret
     }
   }
+}
 
 const asyncReadable = (initialValue, lifecycle) =>
   readable(initialValue, asyncLifecycle(lifecycle))
