@@ -26,7 +26,7 @@
 
 <div class="section">
   <div class="container">
-    <div class="title is-size-2">Admin</div>
+    <!-- <div class="title is-size-2">Admin</div> -->
   </div>
 </div>
 
