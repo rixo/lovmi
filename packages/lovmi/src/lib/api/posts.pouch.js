@@ -1,3 +1,4 @@
+import { writable } from "svelte/store"
 import { browser } from "$app/env"
 
 import { readable, derived } from "$lib/util/store"
@@ -6,61 +7,13 @@ import { getUserAuth } from "$lib/user"
 
 import { render } from "./posts.util"
 
-const liveFind = (
-  db$,
-  {
-    prefix,
-    selector = {
-      _id: {
-        $gt: prefix,
-        $lt: prefix + "\uffff",
-      },
-    },
-  }
-) =>
-  derived(
-    db$,
-    async (db, set) => {
-      if (!db) return
-      try {
-        const feed = db.liveFind({
-          selector,
-          aggregate: true,
-        })
-        feed.on("update", (update, aggregate) => {
-          // update.doc.id = update.doc._id
-          set(aggregate)
-        })
-        return () => {
-          feed.cancel()
-        }
-      } catch (err) {
-        console.error("Failed to init pouch live find", err)
-      }
-    },
-    []
-  )
-
 export const PouchDBGateway = () => {
   const dbHost = import.meta.env.VITE_DB_HOST
 
-  const settingsDb = readable(null, async (set) => {
+  const db$ = readable(null, async (set) => {
     const { default: PouchDB } = await import("$lib/pouch")
-    set(new PouchDB(dbHost + "/lovmi-settings"))
-  })
-
-  const settings = derived(
-    liveFind(settingsDb, { selector: {} }),
-    ($docs) => Object.fromEntries($docs.map((doc) => [doc._id, doc])),
-    {}
-  )
-
-  const postsDb$ = derived(settings, async ($settings, set) => {
-    const { default: PouchDB } = await import("$lib/pouch")
-    if (!$settings["lovmi-session"]) return
-    const dbName = dbHost + "/" + $settings["lovmi-session"].current_posts_db
     set(
-      new PouchDB(dbName, {
+      new PouchDB(dbHost + "/lovmi-posts", {
         fetch(url, opts) {
           const auth = getUserAuth()
           if (auth) {
@@ -74,21 +27,88 @@ export const PouchDBGateway = () => {
 
   const getPostsDb = async () =>
     new Promise((resolve) => {
-      const unsubscribe = postsDb$.subscribe((db) => {
+      const unsubscribe = db$.subscribe((db) => {
         if (!db) return
         setTimeout(() => unsubscribe())
         resolve(db)
       })
     })
 
-  const posts = liveFind(postsDb$, { prefix: "posts/" })
+  const era$ = writable(null)
 
-  const votes = liveFind(postsDb$, { prefix: "votes/" })
+  if (browser) {
+    const initEra = async () => {
+      const db = await getPostsDb()
+      const settings = await db.get("$settings")
+      era$.set(settings?.current_era)
+    }
+    initEra()
+  }
+
+  const getCurrentEra = async () =>
+    new Promise((resolve) => {
+      const unsubscribe = era$.subscribe(($era) => {
+        if (!$era) return
+        setTimeout(() => unsubscribe())
+        resolve($era)
+      })
+    })
+
+  const allDocs = derived(
+    [db$, era$],
+    async ([db, $era], set) => {
+      if (!db) return
+      if ($era == null) return
+      console.log(">>", $era)
+      try {
+        const feed = db.liveFind({
+          selector: {
+            $or: [
+              {
+                _id: {
+                  $gt: "$",
+                  $lt: "$\uffff",
+                },
+              },
+              {
+                _id: {
+                  $gt: `${$era}/`,
+                  $lt: `${$era}/\uffff`,
+                },
+              },
+            ],
+          },
+          aggregate: true,
+        })
+        feed.on("update", (update, aggregate) => {
+          if (update.doc._id === "$settings") {
+            era$.set(update.doc.current_era)
+          }
+          // update.doc.id = update.doc._id
+          set(aggregate)
+        })
+        return () => {
+          feed.cancel()
+        }
+      } catch (err) {
+        console.error("Failed to init pouch live find", err)
+      }
+    },
+    []
+  )
+
+  const isPost = (doc) => /^\d+\/posts\//.test(doc._id)
+
+  const isVote = (doc) => /^\d+\/votes\//.test(doc._id)
+
+  const posts = derived(allDocs, ($allDocs) => $allDocs.filter(isPost))
+
+  const votes = derived(allDocs, ($allDocs) => $allDocs.filter(isVote))
 
   const postsWithVotes = derived([posts, votes], ([$posts, $votes]) => {
     const votesByPosts = {}
     for (const vote of $votes) {
-      const match = /^votes\/([^/]+)\/(.*)$/.exec(vote._id)
+      const match = /^\d+\/votes\/([^/]+)\/(.*)$/.exec(vote._id)
       if (!match) continue
       const userId = match[1]
       const postId = match[2]
@@ -116,9 +136,10 @@ export const PouchDBGateway = () => {
 
   const add = async (post) => {
     const db = await getPostsDb()
+    const era = await getCurrentEra()
     const record = {
       ...post,
-      _id: `posts/${post.author}/${new Date().getTime()}`,
+      _id: `${era}/posts/${post.author}/${new Date().getTime()}`,
       description_html: post.description && render(post.description),
       votes: {},
       score: 0,
@@ -128,7 +149,8 @@ export const PouchDBGateway = () => {
 
   const castVote = async (userId, postId, value) => {
     const db = await getPostsDb()
-    const id = `votes/${userId}/${postId}`
+    const era = await getCurrentEra()
+    const id = `${era}/votes/${userId}/${postId}`
     const record = {
       _id: id,
       date: new Date().toISOString(),
@@ -145,37 +167,6 @@ export const PouchDBGateway = () => {
       }
     }
   }
-
-  // add({
-  //   author: "foobar",
-  //   title: "Hello World",
-  //   description: `
-  //   Badaboom
-  //
-  //   boom
-  //   `,
-  // })
-  // // add({
-  // //   author: "bahbar",
-  // //   title: "I love you",
-  // //   description: "... if you love me!",
-  // //   image: "https://pixy.org/src/11/116695.png",
-  // // })
-  // // add({
-  // //   author: "bahbar",
-  // //   title: "I love you",
-  // //   description: "... if you love me!",
-  // //   image: "https://pixy.org/src/11/116695.png",
-  // // })
-  // add({
-  //   author: "foobar",
-  //   title: "Hello World",
-  //   description: `
-  //   Badaboom
-  //
-  //   boom (2)
-  //   `,
-  // })
 
   return {
     subscribe: postsWithVotes.subscribe,
