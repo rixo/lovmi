@@ -13,13 +13,10 @@
   <div class="container">
     <h1 class="title is-size-1">
       <div class="icon-text">
-        <span
-          class="icon has-text-warning-dark"
-          style="font-size: .8em; margin: -.05em .5em 0"
-        >
+        <span>Classement</span>
+        <span class="icon trophy">
           <Fa icon={faTrophy} />
         </span>
-        <span>Classement</span>
       </div>
     </h1>
     <div class="subtitle is-size-4 pt-5">
@@ -35,17 +32,14 @@
         <TopUserTable topUsers={$currentTopUsers} />
       </div>
       <div class="column">
-        <div class="card" style="max-width: 30rem; margin: auto;">
+        <div class="card prize-pool">
           <div class="card-content">
             <div class="title">
               <div class="icon-text">
-                <span
-                  class="icon"
-                  style="font-size: .8em; margin: -.05em .5em 0; color: hsl(347, 90%, 76%)	"
-                >
+                <span>Cagnotte</span>
+                <span class="icon piggy-bank">
                   <Fa icon={faPiggyBank} />
                 </span>
-                <span>Cagnotte</span>
               </div>
             </div>
 
@@ -84,3 +78,21 @@
 <div class="section">
   <div class="container" />
 </div>
+
+<style>
+  .card.prize-pool {
+    max-width: 30rem;
+    margin: auto;
+  }
+
+  .icon.trophy {
+    font-size: 0.8em;
+    margin: -0.05em 0.75em 0;
+    color: hsl(51, 80%, 50%);
+  }
+  .icon.piggy-bank {
+    font-size: 0.8em;
+    margin: -0.05em 0.5em 0;
+    color: hsl(347, 90%, 76%);
+  }
+</style>
