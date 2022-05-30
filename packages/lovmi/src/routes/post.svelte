@@ -55,66 +55,77 @@
   }
 </script>
 
-<div class="section">
-  <div class="container">
-    <h1 class="title">Nouvelle idée 💡</h1>
-    <div class="subtitle">
-      Poste une idée qui brille et/ou un croquis qui claque pour recevoir de l'<strong
-        >amour</strong
-      >&nbsp;!
+<main>
+  <div class="section">
+    <div class="container">
+      <h1 class="title">Nouvelle idée 💡</h1>
+      <div class="subtitle">
+        Poste une idée qui brille et/ou un croquis qui claque pour recevoir de
+        l'<strong>amour</strong>&nbsp;!
+      </div>
     </div>
   </div>
-</div>
 
-<div class="container px-5">
-  <form class="container" on:submit|preventDefault={submit}>
-    <div class="field">
-      <label for="title" class="label">Titre</label>
-      <div class="control">
-        <input
-          id="title"
-          bind:value={values.title}
-          class="input"
-          type="text"
-          on:focus={scrollIntoView}
-        />
+  <div class="container px-5">
+    <form class="container" on:submit|preventDefault={submit}>
+      <div class="field">
+        <label for="title" class="label">Titre</label>
+        <div class="control">
+          <input
+            id="title"
+            bind:value={values.title}
+            class="input"
+            type="text"
+            on:focus={scrollIntoView}
+          />
+        </div>
       </div>
-    </div>
 
-    <div class="field">
-      <label for="field-image" class="label">Illustration</label>
-      <div class="control" id="field-image">
-        <DrawingPad
-          bind:getDataURL={getPadDataURL}
-          bind:hasData={values.hasDrawing}
-          on:focus={scrollIntoView}
-        />
+      <div class="field">
+        <label for="field-image" class="label">Illustration</label>
+        <div class="control" id="field-image">
+          <DrawingPad
+            bind:getDataURL={getPadDataURL}
+            bind:hasData={values.hasDrawing}
+            on:focus={scrollIntoView}
+          />
+        </div>
       </div>
-    </div>
 
-    <div class="field">
-      <label for="description" class="label">Message</label>
-      <div class="control">
-        <textarea
-          id="description"
-          class="textarea"
-          bind:value={values.description}
-          on:focus={scrollIntoView}
-        />
+      <div class="field">
+        <label for="description" class="label">Message</label>
+        <div class="control">
+          <textarea
+            id="description"
+            class="textarea"
+            bind:value={values.description}
+            on:focus={scrollIntoView}
+          />
+        </div>
       </div>
-    </div>
 
-    <div class="buttons are-medium">
-      <button class="submit button is-primary" disabled={!canSubmit}>
-        <span class="icon">
-          <Fa icon={faCheck} />
-        </span>
-        <span>Envoyer&nbsp;!</span>
-      </button>
-      <a href="/" class="button">Annuler</a>
-    </div>
-  </form>
-</div>
+      <div class="buttons are-medium">
+        <button class="submit button is-primary" disabled={!canSubmit}>
+          <span class="icon">
+            <Fa icon={faCheck} />
+          </span>
+          <span>Envoyer&nbsp;!</span>
+        </button>
+        <a
+          href="/"
+          class="button"
+          on:click={(e) => {
+            const currentHref = window.location.href
+            history.back()
+            if (window.location.href !== currentHref) {
+              e.preventDefault()
+            }
+          }}>Annuler</a
+        >
+      </div>
+    </form>
+  </div>
+</main>
 
 <style lang="scss">
   form {
@@ -135,4 +146,15 @@
   /* #field-image > :global(*) {
     max-height: 45vh;
   } */
+
+  @media screen and (max-width: 600px) {
+    main {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      z-index: 50;
+      background: $body-background-color;
+      overflow: auto;
+    }
+  }
 </style>
