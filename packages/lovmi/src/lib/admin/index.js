@@ -32,6 +32,7 @@ export const auth = isServer()
         setTimeout(() => {
           loading.set(false)
         })
+        return
       }
       verify({ token: storedToken })
         .then((token) => {
