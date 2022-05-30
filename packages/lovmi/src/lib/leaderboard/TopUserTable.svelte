@@ -11,13 +11,13 @@
     <tr>
       <th><abbr title="Position">Pos</abbr></th>
       <th>Utilisateur</th>
-      <th class="is-hidden-mobile"
+      <th class="is-hidden-mobile has-text-centered"
         ><abbr title="2 point par message posté">Posts</abbr></th
       >
-      <th class="is-hidden-mobile">
+      <th class="is-hidden-mobile has-text-centered">
         <abbr title="1 point par vote émis">Votes émis</abbr>
       </th>
-      <th colspan="2" class="is-hidden-mobile">
+      <th colspan="2" class="is-hidden-mobile has-text-centered">
         <abbr title="+10 par vote positif reçu, -10 par vote négatif">
           Votes reçus
         </abbr>
