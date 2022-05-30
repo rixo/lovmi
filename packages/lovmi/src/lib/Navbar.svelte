@@ -94,17 +94,17 @@
           <span />
         {:else if $user}
           <div class="navbar-item has-dropdown is-hoverable">
-            <a class="navbar-link" href="/my-account" on:click={closeMenu}>
+            <div class="navbar-link">
               <Fa icon={faUser} class="icon" />
               <span>{$user.name}</span>
-            </a>
+            </div>
             <div class="navbar-dropdown">
-              <a class="navbar-item" href="/account" on:click={closeMenu}>
+              <a class="navbar-item" href="/my-account" on:click={closeMenu}>
                 <!-- <Fa icon={faDoorOpen} class="icon" /> -->
                 <span>Mon compte</span>
               </a>
               <a class="navbar-item" href on:click|preventDefault={disconnect}>
-                <!-- <Fa icon={faDoorOpen} class="icon" /> -->
+                <!-- <span class="icon"><Fa icon={faDoorOpen}  /></span> -->
                 <span>Déconnexion</span>
               </a>
             </div>

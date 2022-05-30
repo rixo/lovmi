@@ -50,6 +50,6 @@ export async function post({ request }) {
 
   return {
     status: 200,
-    body: { id: name, name, auth: basicAuth(lovmiName, password) },
+    body: { id: name, era, name, auth: basicAuth(lovmiName, password) },
   }
 }

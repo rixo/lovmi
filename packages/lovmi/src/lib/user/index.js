@@ -1,16 +1,18 @@
-import { get, writable } from "svelte/store"
+import { get, writable, derived } from "svelte/store"
 import { browser } from "$app/env"
 
 import { noop, readOnly } from "$lib/util"
 import { SIGN_IN, SIGN_UP } from "$lib/LoginModal/index.svelte"
-import { gateway } from "$lib/api"
+import { getCurrentEra, era } from "$lib/api/settings"
 
 const key = { scope: "lovmi.user" }
 
 const CURRENT_USER = "lovmi:current_user"
 
 class UserGateway {
-  createUser() {}
+  createUser() {
+    throw new Error("abstract")
+  }
 
   setCurrentUser(user) {
     if (!browser) throw new User("Client-side only")
@@ -56,8 +58,8 @@ class RemoteUserGateway extends UserGateway {
       },
       body: JSON.stringify({ login, password }),
     })
-    const { id, name, auth } = await res.json()
-    const user = { id, name, auth }
+    const { id, era, name, auth } = await res.json()
+    const user = { id, era, name, auth }
     this.setCurrentUser(user)
     return user
   }
@@ -100,6 +102,16 @@ const initUserContext = () => {
         console.error("Failed to get current user", err)
         user.loading.set(false)
       })
+
+    derived([era, user], (x) => x).subscribe(([$era, $user]) => {
+      if ($era == null) return
+      if ($user == null) return
+      if ($user.era !== $era) {
+        debugger
+        user.set(null)
+        user.disconnect()
+      }
+    })
   }
 
   const goToSignup = () => {
@@ -186,7 +198,7 @@ export const getUserAuth = () => {
 const basicAuth = (login, password) => `Basic ${btoa(login + ":" + password)}`
 
 export const signin = async (name, password) => {
-  const era = await gateway.getCurrentEra()
+  const era = await getCurrentEra()
   const username = `lovmi__${era}__${name}`
   const res = await fetch(`${import.meta.env.VITE_USER_DB_HOST}/_session`, {
     method: "POST",
@@ -196,7 +208,7 @@ export const signin = async (name, password) => {
     body: JSON.stringify({ name: username, password }),
   })
   if (res.ok) {
-    const user = { id: name, name, auth: basicAuth(username, password) }
+    const user = { id: name, name, era, auth: basicAuth(username, password) }
     userGateway.setCurrentUser(user)
     ctx.user.set(user)
     return { success: true }

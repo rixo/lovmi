@@ -110,7 +110,7 @@ export const PouchDBGateway = () => {
   const eraPeriod$ = derived(settings, ($settings) => $settings.current_era)
 
   const era$ = derived(eraPeriod$, ($era) =>
-    $era != null ? String($era).split()[0] : null
+    $era != null ? String($era).split(".")[0] : null
   )
 
   const period$ = derived(eraPeriod$, ($era) =>
@@ -264,6 +264,7 @@ export const PouchDBGateway = () => {
     add,
     castVote,
     pastResults,
+    era: era$,
     getCurrentEra,
     leaderboardEnabled,
     isLeaderboardEnabled,
