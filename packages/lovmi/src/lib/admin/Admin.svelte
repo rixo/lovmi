@@ -1,8 +1,8 @@
 <script>
   import { logout } from "$lib/admin"
-  import { startNewEra } from "$lib/admin/actions"
+  import { startNewEra, startNewPeriod } from "$lib/admin/actions"
 
-  import ErrorMessage from "./ErrorMessage.svelte"
+  import AdminPostAction from "./AdminPostAction.svelte"
 
   const startNewEraState = startNewEra.state
 </script>
@@ -35,7 +35,9 @@
         Simuler le passage du temps, pour que les joueurs touchent leurs
         récompenses. Les meilleurs posts de la "journée" seront récompensés.
       </div>
-      <button class="button is-success">Démarrer une nouvelle journée</button>
+      <AdminPostAction action={startNewPeriod}>
+        Démarrer une nouvelle journée
+      </AdminPostAction>
     </div>
   </div>
 </div>
@@ -77,13 +79,6 @@
     <div class="subtitle">
       Tout remettre à zéro pour commencer une nouvelle session.
     </div>
-    <ErrorMessage error={$startNewEraState.error} />
-    <button
-      class="button is-danger"
-      class:is-loading={$startNewEraState.loading}
-      on:click={startNewEra}
-    >
-      Remettre à zéro
-    </button>
+    <AdminPostAction action={startNewEra}>Remettre à zéro</AdminPostAction>
   </div>
 </div>

@@ -12,6 +12,7 @@ export {
   faHeartCrack,
   faLightbulb,
   faLock,
+  faPiggyBank,
   faPoop,
   faRotateLeft,
   faRotateRight,

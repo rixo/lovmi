@@ -36,3 +36,8 @@ export const startNewEra = AdminAction({
   url: "/admin/new_era",
   errorLog: "Failed to start new era",
 })
+
+export const startNewPeriod = AdminAction({
+  url: "/admin/new_period",
+  errorLog: "Failed to start new period",
+})

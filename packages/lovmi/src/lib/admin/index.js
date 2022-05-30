@@ -1,4 +1,4 @@
-import { writable, readable } from "svelte/store"
+import { writable, readable, derived } from "svelte/store"
 import { browser } from "$app/env"
 
 const STORAGE_TOKEN = "lovmi:admin-token"
@@ -70,3 +70,5 @@ export const logout = () => {
   auth.set(null)
   localStorage.removeItem(STORAGE_TOKEN)
 }
+
+export const isAdmin = derived(auth, Boolean)

@@ -7,6 +7,50 @@ import { getUserAuth } from "$lib/user"
 
 import { render } from "./posts.util"
 
+const byTypeRegex = /^[\d.]+\/([^/]+)(?:\/|$)/
+
+const splitDocsByType = ($allDocs) => {
+  const docs = {
+    posts: [],
+    votes: [],
+    results: [],
+  }
+  for (const doc of $allDocs) {
+    const eraTypeMatch = byTypeRegex.exec(doc._id)
+    if (!eraTypeMatch) continue
+    const type = eraTypeMatch[1]
+    docs[type].push(doc)
+  }
+  return docs
+}
+
+const mergePostsVotes = ($posts, $votes) => {
+  const votesByPosts = {}
+  for (const vote of $votes) {
+    const match = /^[\d.]+\/votes\/([^/]+)\/(.*)$/.exec(vote._id)
+    if (!match) continue
+    const userId = match[1]
+    const postId = match[2]
+    if (!votesByPosts[postId]) {
+      votesByPosts[postId] = { _score: 0 }
+    }
+    const value = vote.value > 0 ? 1 : vote.value < 0 ? -1 : 0
+    votesByPosts[postId][userId] = value
+    votesByPosts[postId]._score += value
+  }
+
+  return $posts.map((post) => ({
+    ...post,
+    score: votesByPosts[post._id]?._score || 0,
+    votes: votesByPosts[post._id] || {},
+  }))
+}
+
+export const consolidatePostsWithVotes = (docs) => {
+  const docsByType = splitDocsByType(docs)
+  return mergePostsVotes(docsByType.posts, docsByType.votes)
+}
+
 export const PouchDBGateway = () => {
   const dbHost = import.meta.env.VITE_DB_HOST
 
@@ -38,6 +82,14 @@ export const PouchDBGateway = () => {
 
   const era$ = writable(null)
 
+  const actualEra$ = derived(era$, ($era) =>
+    $era != null ? String($era).split()[0] : null
+  )
+
+  const period$ = derived(era$, ($era) =>
+    $era != null ? String($era).split(".")[1] : null
+  )
+
   if (browser) {
     const initEra = async () => {
       const db = await getPostsDb()
@@ -58,11 +110,13 @@ export const PouchDBGateway = () => {
 
   const allDocs = derived(
     [db$, era$],
-    async ([db, $era], set) => {
+    async ([db, $eraAndPeriod], set) => {
       loading.set(true)
 
       if (!db) return
-      if ($era == null) return
+      if ($eraAndPeriod == null) return
+
+      const era = String($eraAndPeriod).split(".")[0]
 
       try {
         const feed = db.liveFind({
@@ -76,8 +130,14 @@ export const PouchDBGateway = () => {
               },
               {
                 _id: {
-                  $gt: `${$era}/`,
-                  $lt: `${$era}/\uffff`,
+                  $gt: `${era}/`,
+                  $lt: `${era}/\uffff`,
+                },
+              },
+              {
+                _id: {
+                  $gt: `${$eraAndPeriod}/`,
+                  $lt: `${$eraAndPeriod}/\uffff`,
                 },
               },
             ],
@@ -106,40 +166,39 @@ export const PouchDBGateway = () => {
     []
   )
 
-  const isPost = (doc) => /^\d+\/posts\//.test(doc._id)
+  const docsByType = derived(allDocs, splitDocsByType)
 
-  const isVote = (doc) => /^\d+\/votes\//.test(doc._id)
+  const posts = derived(docsByType, ($docs) => $docs.posts)
 
-  const posts = derived(allDocs, ($allDocs) => $allDocs.filter(isPost))
+  const votes = derived(docsByType, ($docs) => $docs.votes)
 
-  const votes = derived(allDocs, ($allDocs) => $allDocs.filter(isVote))
+  const results = derived(docsByType, ($docs) => $docs.results)
 
-  const postsWithVotes = derived([posts, votes], ([$posts, $votes]) => {
-    const votesByPosts = {}
-    for (const vote of $votes) {
-      const match = /^\d+\/votes\/([^/]+)\/(.*)$/.exec(vote._id)
-      if (!match) continue
-      const userId = match[1]
-      const postId = match[2]
-      if (!votesByPosts[postId]) {
-        votesByPosts[postId] = { _score: 0 }
-      }
-      const value = vote.value > 0 ? 1 : vote.value < 0 ? -1 : 0
-      votesByPosts[postId][userId] = value
-      votesByPosts[postId]._score += value
-    }
-
-    return $posts.map((post) => ({
-      ...post,
-      score: votesByPosts[post._id]?._score || 0,
-      votes: votesByPosts[post._id] || {},
-    }))
-  })
+  const postsWithVotes = derived([posts, votes], ([$posts, $votes]) =>
+    mergePostsVotes($posts, $votes)
+  )
 
   // keep open
   if (browser) {
     postsWithVotes.subscribe(() => {})
   }
+
+  const pastResults = derived(
+    [results, period$],
+    ([$results, $period]) => {
+      const results = $results?.[0]?.results
+      if (!results) return []
+      return Object.entries(results)
+        .map(([period, results]) => ({
+          period,
+          results,
+          periodDiff: parseInt(period) - $period,
+        }))
+        .filter(({ results }) => results?.length)
+        .sort((a, b) => b.period - a.period)
+    },
+    []
+  )
 
   const add = async (post) => {
     const db = await getPostsDb()
@@ -180,5 +239,6 @@ export const PouchDBGateway = () => {
     loading,
     add,
     castVote,
+    pastResults,
   }
 }

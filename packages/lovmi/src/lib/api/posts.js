@@ -3,6 +3,86 @@ import { get, readable, writable, derived } from "svelte/store"
 
 import { render } from "./posts.util"
 
+const getAuthorFromPostId = (_id) => {
+  return _id.split("/")[2]
+}
+
+export const computePostsResult = ($posts) => {
+  const stats = {}
+
+  const getStat = (user) => {
+    if (!stats[user]) {
+      stats[user] = {
+        userId: user,
+        posts: 0,
+        votes: 0,
+        upvotes: 0,
+        downvotes: 0,
+        score: 0,
+      }
+    }
+    return stats[user]
+  }
+
+  let interactions = 0
+
+  for (const post of $posts) {
+    const user = getAuthorFromPostId(post._id)
+    const stat = getStat(user)
+    stat.posts++
+    stat.score += post.score
+
+    interactions++
+
+    if (post.votes) {
+      for (const [voter, value] of Object.entries(post.votes)) {
+        if (voter === "_score") continue
+
+        interactions++
+
+        const voterStat = getStat(voter)
+        voterStat.votes++
+        if (value > 0) {
+          stat.upvotes++
+        } else if (value < 0) {
+          stat.downvotes++
+        }
+      }
+    }
+  }
+
+  const results = Object.values(stats)
+    .map((stat) => {
+      stat.href = `/profile/${stat.userId}`
+      stat.total = stat.posts * 5 + stat.votes * 1 + stat.score * 10
+      return stat
+    })
+    .sort((a, b) => b.total - a.total)
+    .map((stat, i) => {
+      stat.href = `/profile/${stat.userId}`
+      stat.pos = i + 1
+      return stat
+    })
+
+  const prizePool = interactions * 4.2
+
+  const allPositiveScores = results
+    .filter(({ total }) => total > 0)
+    .reduce((sum, { total }) => sum + total, 0)
+
+  for (const line of results) {
+    if (line.total > 0) {
+      line.prize = Number(
+        Math.floor(prizePool * (line.total / allPositiveScores) * 100) / 100
+      ).toFixed(2)
+    } else {
+      line.prize = 0
+    }
+  }
+
+  return { results, prizePool }
+}
+
 export const InMemoryGateway = () => {
   const posts = writable([])
 
@@ -164,61 +244,45 @@ export const PostsApi = (gateway) => {
       author: user.id,
     })
 
-  const currentTopUsers = derived(
+  const currentResults = derived(
     posts,
-    ($posts) => {
-      const stats = {}
-
-      const getStat = (user) => {
-        if (!stats[user]) {
-          stats[user] = {
-            userId: user,
-            posts: 0,
-            votes: 0,
-            upvotes: 0,
-            downvotes: 0,
-            score: 0,
-          }
-        }
-        return stats[user]
-      }
-
-      for (const post of $posts) {
-        const user = post.author
-        const stat = getStat(user)
-        stat.posts++
-        stat.score += post.score
-        if (post.votes) {
-          for (const [voter, value] of Object.entries(post.votes)) {
-            if (voter === "_score") continue
-            const voterStat = getStat(voter)
-            voterStat.votes++
-            if (value > 0) {
-              stat.upvotes++
-            } else if (value < 0) {
-              stat.downvotes++
-            }
-          }
-        }
-      }
-
-      const lines = Object.values(stats)
-        .map((stat) => {
-          stat.href = `/profile/${stat.userId}`
-          stat.total = stat.posts * 5 + stat.votes * 1 + stat.score * 10
-          return stat
-        })
-        .sort((a, b) => b.total - a.total)
-        .map((stat, i) => {
-          stat.href = `/profile/${stat.userId}`
-          stat.pos = i + 1
-          return stat
-        })
-
-      return lines
-    },
+    ($posts) => computePostsResult($posts),
     []
   )
 
-  return { posts, loading: gateway.loading, error, create, currentTopUsers }
+  const currentTopUsers = derived(
+    currentResults,
+    ($currentResults) => $currentResults.results,
+    []
+  )
+
+  const currentPrizePool = derived(
+    currentResults,
+    ($currentResults) => $currentResults.prizePool,
+    []
+  )
+
+  const pastTopUsers = derived(gateway.pastResults, ($pastResults) => {
+    if (!$pastResults) return []
+    return $pastResults.map(({ period, results, periodDiff }) => ({
+      period,
+      results,
+      title:
+        periodDiff === -1
+          ? "Hier"
+          : periodDiff === -2
+          ? "Avant hier"
+          : `Il y a ${-1 * periodDiff} jours`,
+    }))
+  })
+
+  return {
+    posts,
+    loading: gateway.loading,
+    error,
+    create,
+    currentTopUsers,
+    currentPrizePool,
+    pastTopUsers,
+  }
 }
