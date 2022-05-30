@@ -54,7 +54,7 @@ export const computePostsResult = ($posts) => {
   const results = Object.values(stats)
     .map((stat) => {
       stat.href = `/profile/${stat.userId}`
-      stat.total = stat.posts * 5 + stat.votes * 1 + stat.score * 10
+      stat.total = stat.posts * 0 + stat.votes * 1 + stat.score * 10
       return stat
     })
     .sort((a, b) => b.total - a.total)

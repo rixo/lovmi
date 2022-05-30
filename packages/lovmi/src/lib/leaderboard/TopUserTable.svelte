@@ -9,11 +9,14 @@
 <table class="table">
   <thead>
     <tr>
-      <th><abbr title="Position">Pos</abbr></th>
+      <th class="has-text-centered">
+        <abbr title="Position">Pos</abbr>
+      </th>
       <th>Utilisateur</th>
-      <th class="is-hidden-mobile has-text-centered"
-        ><abbr title="2 point par message posté">Posts</abbr></th
-      >
+      <th class="is-hidden-mobile has-text-centered">
+        <!-- <abbr title="2 point par message posté">Posts</abbr> -->
+        Posts
+      </th>
       <th class="is-hidden-mobile has-text-centered">
         <abbr title="1 point par vote émis">Votes émis</abbr>
       </th>
@@ -65,7 +68,7 @@
 </table>
 
 <style>
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 1024px) {
     table {
       min-width: 100%;
     }
