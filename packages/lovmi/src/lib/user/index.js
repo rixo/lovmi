@@ -3,6 +3,7 @@ import { browser } from "$app/env"
 
 import { noop, readOnly } from "$lib/util"
 import { SIGN_IN, SIGN_UP } from "$lib/LoginModal/index.svelte"
+import { gateway } from "$lib/api"
 
 const key = { scope: "lovmi.user" }
 
@@ -185,15 +186,17 @@ export const getUserAuth = () => {
 const basicAuth = (login, password) => `Basic ${btoa(login + ":" + password)}`
 
 export const signin = async (name, password) => {
+  const era = await gateway.getCurrentEra()
+  const username = `lovmi__${era}__${name}`
   const res = await fetch(`${import.meta.env.VITE_USER_DB_HOST}/_session`, {
     method: "POST",
     headers: {
       "content-type": "application/json",
     },
-    body: JSON.stringify({ name, password }),
+    body: JSON.stringify({ name: username, password }),
   })
   if (res.ok) {
-    const user = { id: name, name, auth: basicAuth(name, password) }
+    const user = { id: name, name, auth: basicAuth(username, password) }
     userGateway.setCurrentUser(user)
     ctx.user.set(user)
     return { success: true }

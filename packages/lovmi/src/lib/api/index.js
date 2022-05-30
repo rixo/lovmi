@@ -5,4 +5,6 @@ import { PouchDBGateway } from "./posts.pouch"
 
 // export const posts = PostsApi(InMemoryGateway())
 
-export const posts = PostsApi(browser ? PouchDBGateway() : InMemoryGateway())
+export const gateway = browser ? PouchDBGateway() : InMemoryGateway()
+
+export const posts = PostsApi(gateway)

@@ -99,7 +99,7 @@ export const PouchDBGateway = () => {
     initEra()
   }
 
-  const getCurrentEra = async () =>
+  const getCurrentEraPeriod = async () =>
     new Promise((resolve) => {
       const unsubscribe = era$.subscribe(($era) => {
         if (!$era) return
@@ -107,6 +107,11 @@ export const PouchDBGateway = () => {
         resolve($era)
       })
     })
+
+  const getCurrentEra = async () => {
+    const eraPeriod = await getCurrentEraPeriod()
+    return eraPeriod.split(".")[0]
+  }
 
   const allDocs = derived(
     [db$, era$],
@@ -202,7 +207,7 @@ export const PouchDBGateway = () => {
 
   const add = async (post) => {
     const db = await getPostsDb()
-    const era = await getCurrentEra()
+    const era = await getCurrentEraPeriod()
     const record = {
       ...post,
       _id: `${era}/posts/${post.author}/${new Date().getTime()}`,
@@ -215,7 +220,7 @@ export const PouchDBGateway = () => {
 
   const castVote = async (userId, postId, value) => {
     const db = await getPostsDb()
-    const era = await getCurrentEra()
+    const era = await getCurrentEraPeriod()
     const id = `${era}/votes/${userId}/${postId}`
     const record = {
       _id: id,
@@ -240,5 +245,6 @@ export const PouchDBGateway = () => {
     add,
     castVote,
     pastResults,
+    getCurrentEra,
   }
 }
