@@ -1,7 +1,12 @@
 import { writable } from "svelte/store"
 import { getAuthToken } from "$lib/admin"
+import { isLeaderboardEnabled } from "$lib/api/settings"
 
-const AdminAction = ({ url, errorLog = "Failed to post admin action" }) => {
+const AdminAction = ({
+  url,
+  errorLog = "Failed to post admin action",
+  body,
+}) => {
   const state = writable({
     loading: false,
     error: null,
@@ -13,10 +18,23 @@ const AdminAction = ({ url, errorLog = "Failed to post admin action" }) => {
 
       const authorization = await getAuthToken()
 
-      const res = await fetch(url, {
+      const req = {
         method: "POST",
-        headers: { authorization },
-      })
+        headers: { authorization, "content-type": "application/json" },
+      }
+
+      if (body) {
+        if (typeof body === "function") {
+          req.body = await body()
+        } else {
+          req.body = body
+        }
+        if (typeof req.body !== "string") {
+          req.body = JSON.stringify(req.body)
+        }
+      }
+
+      const res = await fetch(url, req)
 
       if (!res.ok) throw new Error(`HTTP error (${res.status})`)
 
@@ -40,4 +58,14 @@ export const startNewEra = AdminAction({
 export const startNewPeriod = AdminAction({
   url: "/admin/new_period",
   errorLog: "Failed to start new period",
+})
+
+export const toggleLeaderboard = AdminAction({
+  url: "/admin/leaderboard",
+  body: async () => {
+    const current = await isLeaderboardEnabled()
+    return {
+      enabled: !current,
+    }
+  },
 })

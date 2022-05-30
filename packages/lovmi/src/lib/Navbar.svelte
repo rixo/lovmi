@@ -8,6 +8,7 @@
     faGavel,
   } from "$lib/icons"
   import { isAdmin } from "$lib/admin"
+  import { leaderboardEnabled } from "$lib/api/settings"
 
   export let user
 
@@ -48,12 +49,15 @@
           <span><strong>Idée</strong></span>
         </a>
       </div>
-      <div class="navbar-item">
-        <a href="/leaderboard" class="button is-link is-inverted">
-          <span class="icon"><Fa icon={faTrophy} /></span>
-          <span>Classement</span>
-        </a>
-      </div>
+
+      {#if $leaderboardEnabled}
+        <div class="navbar-item">
+          <a href="/leaderboard" class="button is-link is-inverted">
+            <span class="icon"><Fa icon={faTrophy} /></span>
+            <span>Classement</span>
+          </a>
+        </div>
+      {/if}
 
       <a
         href
@@ -147,6 +151,11 @@
     top: 0;
   }
 
+  @media screen and (max-width: 400px) {
+    .navbar-brand .navbar-item:not(:first-child) {
+      padding: 0.5rem 0.1rem;
+    }
+  }
   @media screen and (max-width: 1023px) {
     .navbar-menu {
       position: absolute;

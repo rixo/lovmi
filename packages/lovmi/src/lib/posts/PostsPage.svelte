@@ -52,7 +52,7 @@
 		<a href="/posts/controversial" class="level-item">Contreversés</a>
 	</div> -->
   <div class="section">
-    <h1 class="title">Idées fraiches</h1>
+    <h1 class="title">Idées fraiches 🍉</h1>
     <div class="subtitle">
       <p>
         Les idées les <strong>plus récentes</strong>.
@@ -63,7 +63,7 @@
   <PostsList {user} {loading} {error} {posts} selector={freshIdeas} />
 
   <div class="section">
-    <h1 class="title">Idées hot</h1>
+    <h1 class="title">Idées hot 🔥</h1>
     <div class="subtitle">
       <p>Les idées les <strong>mieux notées</strong>.</p>
     </div>

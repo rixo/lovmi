@@ -1,12 +1,19 @@
 <script>
   import Fa from "svelte-fa"
+
+  import { browser } from "$app/env"
+  import { goto } from "$app/navigation"
+
   import { faTrophy, faPiggyBank } from "$lib/icons"
   import Brouzoufs from "$lib/Brouzoufs.svelte"
   import TopUserTable from "$lib/leaderboard/TopUserTable.svelte"
   import * as api from "$lib/api"
+  import { leaderboardEnabled } from "$lib/api/settings"
 
   const { currentTopUsers, currentPrizePool, pastTopUsers, loading, error } =
     api.posts
+
+  $: if (!$loading && !$leaderboardEnabled) goto("/")
 </script>
 
 <div class="section">

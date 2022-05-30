@@ -80,28 +80,46 @@ export const PouchDBGateway = () => {
       })
     })
 
-  const era$ = writable(null)
-
-  const actualEra$ = derived(era$, ($era) =>
-    $era != null ? String($era).split()[0] : null
-  )
-
-  const period$ = derived(era$, ($era) =>
-    $era != null ? String($era).split(".")[1] : null
-  )
+  const settings = writable({})
 
   if (browser) {
     const initEra = async () => {
       const db = await getPostsDb()
-      const settings = await db.get("$settings")
-      era$.set(settings?.current_era)
+      settings.set(await db.get("$settings"))
     }
     initEra()
   }
 
+  const getSettings = async () =>
+    new Promise((resolve) => {
+      const unsubscribe = settings.subscribe(($settings) => {
+        if (!$settings) return
+        setTimeout(() => unsubscribe())
+        resolve($settings)
+      })
+    })
+
+  const leaderboardEnabled = derived(
+    settings,
+    ($settings) => !!$settings?.leaderboard_enabled
+  )
+
+  const isLeaderboardEnabled = async () =>
+    !!(await getSettings()).leaderboard_enabled
+
+  const eraPeriod$ = derived(settings, ($settings) => $settings.current_era)
+
+  const era$ = derived(eraPeriod$, ($era) =>
+    $era != null ? String($era).split()[0] : null
+  )
+
+  const period$ = derived(eraPeriod$, ($era) =>
+    $era != null ? String($era).split(".")[1] : null
+  )
+
   const getCurrentEraPeriod = async () =>
     new Promise((resolve) => {
-      const unsubscribe = era$.subscribe(($era) => {
+      const unsubscribe = eraPeriod$.subscribe(($era) => {
         if (!$era) return
         setTimeout(() => unsubscribe())
         resolve($era)
@@ -114,7 +132,7 @@ export const PouchDBGateway = () => {
   }
 
   const allDocs = derived(
-    [db$, era$],
+    [db$, eraPeriod$],
     async ([db, $eraAndPeriod], set) => {
       loading.set(true)
 
@@ -152,9 +170,10 @@ export const PouchDBGateway = () => {
 
         feed.on("update", (update, aggregate) => {
           if (update.doc._id === "$settings") {
-            era$.set(update.doc.current_era)
+            settings.set(update.doc)
+          } else {
+            set(aggregate)
           }
-          set(aggregate)
         })
 
         feed.then(() => {
@@ -246,5 +265,7 @@ export const PouchDBGateway = () => {
     castVote,
     pastResults,
     getCurrentEra,
+    leaderboardEnabled,
+    isLeaderboardEnabled,
   }
 }

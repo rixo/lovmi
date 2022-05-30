@@ -1,6 +1,11 @@
 <script>
   import { logout } from "$lib/admin"
-  import { startNewEra, startNewPeriod } from "$lib/admin/actions"
+  import {
+    startNewEra,
+    startNewPeriod,
+    toggleLeaderboard,
+  } from "$lib/admin/actions"
+  import { leaderboardEnabled } from "$lib/api/settings"
 
   import AdminPostAction from "./AdminPostAction.svelte"
 
@@ -20,7 +25,7 @@
   </div>
 </div>
 
-<div class="section">
+<div class="section section-game">
   <div class="container">
     <div class="title is-size-2">Jeu</div>
     <div class="subtitle">
@@ -35,8 +40,28 @@
         Simuler le passage du temps, pour que les joueurs touchent leurs
         récompenses. Les meilleurs posts de la "journée" seront récompensés.
       </div>
-      <AdminPostAction action={startNewPeriod}>
+      <AdminPostAction action={startNewPeriod} class="is-warning">
         Démarrer une nouvelle journée
+      </AdminPostAction>
+    </div>
+
+    <div class="block">
+      <div class="title is-size-4">
+        Page classement
+        {#if $leaderboardEnabled}
+          <span class="tag is-success">Activée</span>
+        {:else}
+          <span class="tag is-danger is-light">Désactivée</span>
+        {/if}
+      </div>
+      <div class="subtitle is-size-5">
+        Afficher ou cacher la page Classement, pour introduire la notion de
+        <strong>monétisation</strong> des réseaux.
+      </div>
+      <AdminPostAction action={toggleLeaderboard} class="is-primary">
+        {$leaderboardEnabled
+          ? "Désactiver la page classement"
+          : "Activer la page classement"}
       </AdminPostAction>
     </div>
   </div>
@@ -79,6 +104,14 @@
     <div class="subtitle">
       Tout remettre à zéro pour commencer une nouvelle session.
     </div>
-    <AdminPostAction action={startNewEra}>Remettre à zéro</AdminPostAction>
+    <AdminPostAction action={startNewEra} class="is-danger"
+      >Remettre à zéro</AdminPostAction
+    >
   </div>
 </div>
+
+<style>
+  .section-game .block {
+    margin-top: 3rem;
+  }
+</style>
