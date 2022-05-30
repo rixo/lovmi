@@ -67,7 +67,7 @@
     <div class="container">
       <hr />
       <h2 class="title">Historique</h2>
-      <p>Les jours n'ayant reçu aucune participation ne sont pas affichés.</p>
+      <!-- <p>Les jours n'ayant reçu aucune participation ne sont pas affichés.</p> -->
     </div>
   </div>
 
@@ -75,7 +75,7 @@
     {#each $pastTopUsers as previousResult (previousResult.period)}
       <div class="block">
         <h3 class="title is-size-4">{previousResult.title}</h3>
-        <TopUserTable topUsers={previousResult.results} />
+        <TopUserTable topUsers={previousResult.results} showGain />
       </div>
     {/each}
   </div>

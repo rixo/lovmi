@@ -3,7 +3,7 @@
 
   export let topUsers
 
-  export let showGain = true
+  export let showGain = false
 </script>
 
 <table class="table">
