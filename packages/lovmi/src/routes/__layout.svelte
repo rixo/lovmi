@@ -43,7 +43,9 @@
         />
       </a> for 2itech.
     </p>
-    <p class="is-size-7">Ce site est une satire.</p>
+    <p class="is-size-7">
+      Ce site est une satire. Ne lui confiez pas vos brouzoufs.
+    </p>
   </div>
 </footer>
 
