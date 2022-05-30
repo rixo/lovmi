@@ -239,10 +239,7 @@ export const PostsApi = (gateway) => {
   })
 
   const create = async (user, data) =>
-    await gateway.add({
-      ...data,
-      author: user.id,
-    })
+    await gateway.add({ ...data, author: user.id })
 
   const currentResults = derived(
     posts,
