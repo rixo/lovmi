@@ -1,10 +1,10 @@
 <script>
   import { onMount, onDestroy, getContext, setContext, tick } from "svelte"
 
-  export let stretchFirst = false,
-    gridGap = "0.5em",
-    colWidth = "minmax(Min(20em, 100%), 1fr)",
-    items = [] // pass in data if it's dynamically updated
+  export let stretchFirst = false
+  export let gridGap = "0.5em"
+  export let colWidth = "minmax(Min(20em, 100%), 1fr)"
+  export let items = [] // pass in data if it's dynamically updated
 
   let grids = [],
     masonryElement
@@ -159,7 +159,7 @@ Taken from: https://github.com/janzheng/svelte-masonry/blob/9f4f837e9cbe5fc04191
   $s: var(--grid-gap); // .5em;
  -->
 <style>
-  :global(.__grid--masonry) {
+  .__grid--masonry {
     display: grid;
     grid-template-columns: repeat(auto-fit, var(--col-width));
     grid-template-rows: masonry;
@@ -167,10 +167,10 @@ Taken from: https://github.com/janzheng/svelte-masonry/blob/9f4f837e9cbe5fc04191
     grid-gap: var(--grid-gap);
     padding: var(--grid-gap);
   }
-  :global(.__grid--masonry > *) {
+  .__grid--masonry > :global(*) {
     align-self: start;
   }
-  :global(.__grid--masonry.__stretch-first > *:first-child) {
+  .__grid--masonry.__stretch-first > :global(*:first-child) {
     grid-column: 1/ -1;
   }
 </style>

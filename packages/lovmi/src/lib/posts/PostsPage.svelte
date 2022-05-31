@@ -1,12 +1,22 @@
 <script>
   import "/node_modules/bulma-pageloader"
-  import { scale } from "svelte/transition"
+  import { scale, slide } from "svelte/transition"
+  import { cubicOut, cubicIn } from "svelte/easing"
   import Masonry from "$lib/Masonry.svelte"
 
-  import { Fa, faEye, faEyeSlash, faCirclePlus, faLightbulb } from "$lib/icons"
+  import {
+    Fa,
+    faEye,
+    faEyeSlash,
+    faCirclePlus,
+    faLightbulb,
+    faSeedling,
+    faPepperHot,
+  } from "$lib/icons"
   import Container from "$lib/ui/Container.svelte"
   import PostCard from "./PostCard.svelte"
   import PostsList from "./PostsList.svelte"
+  import NewPostCTA from "./NewPostCTA.svelte"
   import { freshIdeas, hotIdeas, lastIdeasFirst } from "$lib/posts/filters"
 
   export let posts
@@ -38,72 +48,126 @@
   }
 
   $: items, scheduleRefresh()
+
+  const TAB_FRESH = "FRESH"
+  const TAB_HOT = "HOT"
+  const TAB_ALL = "ALL"
+
+  let activeTab = TAB_FRESH
+
+  const setActiveTab = (tab) => {
+    window.scroll({ top: 0, behavior: "smooth" })
+    activeTab = tab
+  }
 </script>
 
 <div class="pageloader is-bottom-to-top is-danger" class:is-active={loading}>
   <span class="title">Preparing awesomeness</span>
 </div>
 
-<div class="container">
+<div class="root container">
   <!-- <div class="level">
 		<a href="/posts/latest" class="level-item">Les plus récents</a>
 		<a href="/posts/trending" class="level-item">Trendy</a>
 		<a href="/posts/hot" class="level-item">Les mieux notés</a>
 		<a href="/posts/controversial" class="level-item">Contreversés</a>
 	</div> -->
-  <div class="section">
-    <h1 class="title">Idées fraiches 🍉</h1>
-    <div class="subtitle">
-      <p>
-        Les idées les <strong>plus récentes</strong>.
-      </p>
-    </div>
-  </div>
 
-  <PostsList {user} {loading} {error} {posts} selector={freshIdeas} />
-
-  <div class="section">
-    <h1 class="title">Idées hot 🔥</h1>
-    <div class="subtitle">
-      <p>Les idées les <strong>mieux notées</strong>.</p>
-    </div>
-  </div>
-
-  <PostsList {user} {loading} {error} {posts} selector={hotIdeas} />
-
-  <div class="section">
-    <h1 class="title">Toutes les idées</h1>
-    <div class="subtitle">
-      <p>Le <strong>tout venant</strong>, et le reste.</p>
-    </div>
-  </div>
-
-  <PostsList {user} {loading} {error} {posts} selector={lastIdeasFirst} />
-
-  <div class="card my-6 cta" in:scale>
-    <div class="card-content">
-      <div class="title">À court d'idée&nbsp;?</div>
-      <div class="subtitle">
-        Ce que le monde a à proposer ne correspond pas à tes attentes ? Fais <strong
-          >bouger</strong
-        > les choses&nbsp;!
-      </div>
-      <div class="card-footer-item">
-        <a href="/post" class="button is-primary is-medium">
-          <!-- <span class="icon"><Fa icon={faCirclePlus} /></span> -->
-          <span><strong>Propose une idée neuve</strong></span>
-          <span class="icon"><Fa icon={faLightbulb} /></span>
+  <div class="tabs is-medium">
+    <ul>
+      <li class:is-active={activeTab === TAB_FRESH}>
+        <a href on:click|preventDefault={() => setActiveTab(TAB_FRESH)}>
+          <span class="icon is-small">
+            <Fa icon={faSeedling} />
+          </span>
+          <span>Idées fraiches</span>
         </a>
-      </div>
-    </div>
+      </li>
+      <li class:is-active={activeTab === TAB_HOT}>
+        <a href on:click|preventDefault={() => setActiveTab(TAB_HOT)}>
+          <span class="icon is-small">
+            <Fa icon={faPepperHot} />
+          </span>
+          <span>Idées hots</span>
+        </a>
+      </li>
+      <li class:is-active={activeTab === TAB_ALL}>
+        <a href on:click|preventDefault={() => setActiveTab(TAB_ALL)}>
+          Toutes les idées
+        </a>
+      </li>
+    </ul>
   </div>
+
+  {#if activeTab === TAB_FRESH}
+    <div
+      out:slide|local={{ duration: 400, easing: cubicOut }}
+      in:slide|local={{ delay: 400, easing: cubicIn }}
+    >
+      <div class="section">
+        <h1 class="title">Idées fraiches 🍉</h1>
+        <div class="subtitle">
+          <p>
+            Les idées les <strong>plus récentes</strong>.
+          </p>
+        </div>
+      </div>
+
+      <PostsList {user} {loading} {error} {posts} selector={freshIdeas} />
+
+      <NewPostCTA />
+    </div>
+  {/if}
+
+  {#if activeTab === TAB_HOT}
+    <div
+      out:slide|local={{ duration: 400, easing: cubicOut }}
+      in:slide|local={{ delay: 400, easing: cubicIn }}
+    >
+      <div class="section">
+        <h1 class="title">Idées hot 🔥</h1>
+        <div class="subtitle">
+          <p>Les idées les <strong>mieux notées</strong>.</p>
+        </div>
+      </div>
+
+      <PostsList {user} {loading} {error} {posts} selector={hotIdeas} />
+
+      <NewPostCTA />
+    </div>
+  {/if}
+
+  {#if activeTab === TAB_ALL}
+    <div
+      out:slide|local={{ duration: 400, easing: cubicOut }}
+      in:slide|local={{ delay: 400, easing: cubicIn }}
+    >
+      <div class="section">
+        <h1 class="title">Toutes les idées</h1>
+        <div class="subtitle">
+          <p>Le <strong>tout venant</strong>, et le reste.</p>
+        </div>
+      </div>
+
+      <PostsList {user} {loading} {error} {posts} selector={lastIdeasFirst} />
+
+      <NewPostCTA />
+    </div>
+  {/if}
 </div>
 
-<style>
-  @media screen and (min-width: 600px) {
-    .cta.card {
-      max-width: 50%;
-      margin: auto;
+<style lang="scss">
+  .tabs {
+    position: sticky;
+    top: 56px;
+    z-index: 29;
+    background: $body-background-color;
+    padding-top: 0.5rem;
+  }
+
+  @media screen and (max-width: 768px) {
+    .root {
+      min-height: 100vh;
     }
   }
 </style>

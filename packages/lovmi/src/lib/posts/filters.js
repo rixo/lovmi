@@ -1,11 +1,14 @@
-export const freshIdeas = (ideas) => lastIdeasFirst(ideas).slice(0, 3)
+export const freshIdeas = (ideas, user) =>
+  lastIdeasFirst(ideas)
+    .filter((post) => !post?.votes[user?.id])
+    .slice(0, 5)
 
 export const hotIdeas = (ideas) =>
   [...ideas]
     .sort((a, b) => {
       return b.score - a.score
     })
-    .slice(0, 3)
+    .slice(0, 5)
 
 export const lastIdeasFirst = (ideas) =>
   [...ideas].sort((a, b) => {
