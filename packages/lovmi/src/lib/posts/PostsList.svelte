@@ -58,7 +58,10 @@
           <PostCard {post} {user} />
         </div>
       {/each}
-      {#if items.length === 1}
+      {#if items.length < 2}
+        <div class="post-placeholder" />
+      {/if}
+      {#if items.length < 3}
         <div class="post-placeholder" />
       {/if}
     </Masonry>
@@ -68,6 +71,6 @@
 <style>
   .post-placeholder {
     width: 100%;
-    height: 20rem;
+    height: 0rem;
   }
 </style>
