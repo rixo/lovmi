@@ -53,9 +53,13 @@
     scrollToTop(e.target)
     // e.target.scrollIntoViewIfNeeded()
   }
+
+  let activeTab = "drawing"
+
+  const handleTabClick = (e) => {}
 </script>
 
-<main>
+<main class="container">
   <div class="section">
     <div class="container">
       <h1 class="title">Nouvelle idée 💡</h1>
@@ -66,95 +70,155 @@
     </div>
   </div>
 
-  <div class="container px-5">
-    <form class="container" on:submit|preventDefault={submit}>
-      <div class="field">
-        <label for="title" class="label">Titre</label>
-        <div class="control">
-          <input
-            id="title"
-            bind:value={values.title}
-            class="input"
-            type="text"
-            on:focus={scrollIntoView}
-          />
-        </div>
-      </div>
+  <form on:submit|preventDefault={submit}>
+    <div class="field">
+      <input
+        placeholder="Titre"
+        id="title"
+        bind:value={values.title}
+        class="input"
+        type="text"
+        on:focus={scrollIntoView}
+      />
+    </div>
 
-      <div class="field">
-        <label for="field-image" class="label">Illustration</label>
-        <div class="control" id="field-image">
+    <div class="tabs">
+      <ul>
+        <li class:is-active={activeTab === "drawing"}>
+          <a href on:click|preventDefault={() => (activeTab = "drawing")}>
+            Illustration
+          </a>
+        </li>
+        <li class:is-active={activeTab === "message"}>
+          <a href on:click|preventDefault={() => (activeTab = "message")}>
+            Message
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="flex">
+      {#if activeTab == null || activeTab === "drawing"}
+        <div class="field">
           <DrawingPad
             bind:getDataURL={getPadDataURL}
             bind:hasData={values.hasDrawing}
             on:focus={scrollIntoView}
           />
         </div>
-      </div>
+      {/if}
 
-      <div class="field">
-        <label for="description" class="label">Message</label>
-        <div class="control">
+      {#if activeTab == null || activeTab === "message"}
+        <div class="field">
           <textarea
             id="description"
             class="textarea"
+            placeholder="Vous pouvez entrer un message..."
             bind:value={values.description}
             on:focus={scrollIntoView}
           />
         </div>
-      </div>
+      {/if}
+    </div>
 
-      <div class="buttons are-medium">
-        <button class="submit button is-primary" disabled={!canSubmit}>
-          <span class="icon">
-            <Fa icon={faCheck} />
-          </span>
-          <span>Envoyer&nbsp;!</span>
-        </button>
-        <a
-          href="/"
-          class="button"
-          on:click={(e) => {
-            const currentHref = window.location.href
-            history.back()
-            if (window.location.href !== currentHref) {
-              e.preventDefault()
-            }
-          }}>Annuler</a
-        >
-      </div>
-    </form>
-  </div>
+    <div class="buttons are-medium">
+      <button class="submit button is-primary" disabled={!canSubmit}>
+        <span class="icon">
+          <Fa icon={faCheck} />
+        </span>
+        <span>Envoyer&nbsp;!</span>
+      </button>
+      <a
+        href="/"
+        class="button"
+        on:click={(e) => {
+          const currentHref = window.location.href
+          history.back()
+          if (window.location.href !== currentHref) {
+            e.preventDefault()
+          }
+        }}>Annuler</a
+      >
+    </div>
+  </form>
 </main>
 
 <style lang="scss">
+  .section {
+    padding-left: 0;
+  }
+
   form {
     max-width: 600px;
+  }
+
+  .flex {
+    /* flex: 1; */
+    height: 23rem;
   }
 
   .buttons {
     margin-top: 1rem;
     padding-top: 1rem;
-    position: sticky;
-    bottom: 0;
+    /* position: sticky;
+    bottom: 0; */
     background: $body-background-color;
     box-shadow: inset 0 0.0625em 0.125em rgb(10 10 10 / 5%);
     margin: 0 -1.5rem;
     padding: 1rem 1.5rem 0.5rem;
   }
 
-  /* #field-image > :global(*) {
-    max-height: 45vh;
-  } */
+  #field-image > :global(*) {
+    /* max-height: 45vh; */
+  }
 
-  @media screen and (max-width: 600px) {
-    main {
+  @media screen and (max-width: 768px) {
+    main.container {
       position: fixed;
       top: 0;
       bottom: 0;
-      z-index: 50;
+      left: 0;
+      right: 0;
+      padding: 1rem 1rem 0.5rem;
+      z-index: 31; /* above navbar (30) */
       background: $body-background-color;
       overflow: auto;
+      display: flex;
+      flex-direction: column;
     }
+
+    .section:first-child {
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+    .section:first-child .subtitle {
+      display: none;
+    }
+
+    form {
+      flex: 1;
+    }
+
+    .flex {
+      flex: 1;
+      height: auto;
+      /* max-height: 90vh; */
+    }
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    justify-content: strecth;
+  }
+
+  .flex > .field {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .flex > .field > textarea {
+    height: 100%;
   }
 </style>

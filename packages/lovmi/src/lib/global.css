@@ -3,8 +3,8 @@
   --lovmi-bg: hsl(264deg, 83%, 95%);
 } */
 
-.lovmi-brand,
-.lovmi {
+.lovmi-brand {
+  /* .lovmi { */
   color: var(--lovmi-fg);
   /* background-color: var(--lovmi-bg); */
   /* border-top: 1px solid; */

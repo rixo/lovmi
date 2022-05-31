@@ -43,7 +43,7 @@
       <p>
         Connectez-vous pour donner votre avis et vous exprimer pleinement sur <span
           class="lovmi">Lovmi</span
-        >&nbsp;! 🔥🔥🔥
+        >&nbsp;!
       </p>
     </div>
     {#if error}
@@ -54,7 +54,13 @@
     <div class="field">
       <label for="login" class="label">Identifiant</label>
       <div class="control">
-        <input id="login" class="input" type="text" bind:value={username} />
+        <input
+          id="login"
+          placeholder="Identifiant"
+          class="input"
+          type="text"
+          bind:value={username}
+        />
       </div>
     </div>
     <div class="field">
@@ -62,6 +68,7 @@
       <div class="control">
         <input
           id="password"
+          placeholder="Mot de passe"
           class="input"
           type="password"
           bind:value={password}
@@ -79,9 +86,10 @@
         <a
           href
           on:click|preventDefault={goToSignup}
-          class="has-text-primary has-text-weight-bold is-link"
-          >Entrer dans le game</a
-        > 🕶
+          class="has-text-info has-text-weight-bold is-link"
+        >
+          Entrer dans le game 🕶
+        </a>
       </p>
     </div>
   </section>
@@ -95,3 +103,9 @@
     >
   </footer>
 </form>
+
+<style>
+  .field > .label {
+    display: none;
+  }
+</style>

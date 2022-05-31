@@ -183,9 +183,12 @@
 
 <style>
   canvas {
-    height: 400px;
+    /* height: 100%; */
+    flex: 1;
     width: 100%;
     cursor: crosshair;
+    max-height: none;
+    min-height: 0;
   }
   canvas.textarea:active,
   canvas.textarea:focus {

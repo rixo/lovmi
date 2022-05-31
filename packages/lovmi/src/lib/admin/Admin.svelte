@@ -16,9 +16,9 @@
   <div class="container">
     <div class="is-flex">
       <div class="title is-size-1 is-flex-grow-1">Admin</div>
-      <button class="button is-warning" on:click={logout}>Déconnecter</button>
+      <button class="button is-danger" on:click={logout}>Déconnecter</button>
     </div>
-    <div class="subtitle">
+    <div class="subtitle is-size-4">
       Le panneau d'administration vous permet de <strong>contrôler</strong> le déroulement
       d'une partie.
     </div>
@@ -76,18 +76,18 @@
 
     <div class="block">
       <div class="title is-size-4">Attaque XSS</div>
-      <div class="subtitle is-size-5">
+      <p class="subtitle is-size-6">
         <strong>Cross-Site Scripting</strong>&nbsp;: en utilisant un défaut de
         sécurisation dans l'application, nous allons injecter un script
         malicieux sur la page vue par l'utilisateur, pour exécuter des actions à
         sa place.
-      </div>
+      </p>
       <button class="button is-primary">Post XSS</button>
     </div>
 
     <div class="block">
       <div class="title is-size-4">Attaque CSRF</div>
-      <div class="subtitle is-size-5">
+      <div class="subtitle is-size-6">
         <strong>Cross-Site Request Forgery</strong>&nbsp;: à l'aide d'un peu
         d'ingénierie sociale (un lien aguichant), nous allons exécuter une
         action à la place de l'utilisateur en utilisant les droits de sa session

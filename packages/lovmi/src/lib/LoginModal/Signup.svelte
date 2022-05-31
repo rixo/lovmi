@@ -64,6 +64,7 @@
       <div class="control has-icons-right">
         <input
           id="login"
+          placeholder="Identifiant"
           class="input"
           class:is-danger={errors.login}
           type="text"
@@ -84,6 +85,7 @@
       <div class="control">
         <input
           id="password"
+          placeholder="Mot de passe"
           class="input"
           class:is-danger={errors.password}
           type="password"
@@ -105,3 +107,9 @@
     >
   </footer>
 </form>
+
+<style>
+  .field > .label {
+    display: none;
+  }
+</style>
