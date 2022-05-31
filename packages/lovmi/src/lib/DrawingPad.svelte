@@ -30,7 +30,7 @@
     signaturePad.addEventListener("endStroke", updateHasData)
   })
 
-  const handleResize = () => {
+  const handleResize = (e) => {
     // guard: size not changed
     if (width === canvas.offsetWidth && height === canvas.offsetHeight) return
 
@@ -38,11 +38,16 @@
     height = canvas.offsetHeight
 
     const ratio = Math.max(window.devicePixelRatio || 1, 1)
+
+    const data = signaturePad.toData()
+
     canvas.width = width * ratio
     canvas.height = height * ratio
+
     canvas.getContext("2d").scale(ratio, ratio)
 
-    signaturePad.clear()
+    signaturePad.fromData(data)
+    // signaturePad.clear()
   }
 
   export const getDataURL = () => {
@@ -179,20 +184,23 @@
   </div>
 </div>
 
-<canvas class="textarea" bind:this={canvas} />
+<canvas bind:this={canvas} />
 
 <style>
   canvas {
-    /* height: 100%; */
     flex: 1;
+
+    height: 100%;
     width: 100%;
+
+    height: 30px;
+
     cursor: crosshair;
-    max-height: none;
-    min-height: 0;
-  }
-  canvas.textarea:active,
-  canvas.textarea:focus {
-    border-color: #dbdbdb;
+
+    background-color: hsl(0deg, 0%, 100%);
+    border-color: hsl(0deg, 0%, 86%);
+    border-radius: 4px;
+    color: hsl(0deg, 0%, 21%);
     box-shadow: inset 0 0.0625em 0.125em rgb(10 10 10 / 5%);
   }
 

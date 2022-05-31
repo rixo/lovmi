@@ -97,7 +97,7 @@
       </ul>
     </div>
 
-    <div class="flex">
+    <div class="flex" class:flex-large={activeTab === "drawing"}>
       {#if activeTab == null || activeTab === "drawing"}
         <div class="field">
           <DrawingPad
@@ -121,8 +121,8 @@
       {/if}
     </div>
 
-    <div class="buttons are-medium">
-      <button class="submit button is-primary" disabled={!canSubmit}>
+    <div class="buttons-bar are-medium">
+      <button class="submit button is-medium is-success" disabled={!canSubmit}>
         <span class="icon">
           <Fa icon={faCheck} />
         </span>
@@ -130,46 +130,45 @@
       </button>
       <a
         href="/"
-        class="button"
+        class="button is-medium is-danger is-outlined"
         on:click={(e) => {
           const currentHref = window.location.href
           history.back()
           if (window.location.href !== currentHref) {
             e.preventDefault()
           }
-        }}>Annuler</a
+        }}
       >
+        Annuler
+      </a>
     </div>
   </form>
 </main>
 
 <style lang="scss">
+  main.container {
+    padding-bottom: 5rem;
+    background: $body-background-color;
+  }
+
   .section {
     padding-left: 0;
   }
 
   form {
-    max-width: 600px;
+    max-width: 640px;
   }
 
   .flex {
-    /* flex: 1; */
     height: 23rem;
   }
 
-  .buttons {
-    margin-top: 1rem;
-    padding-top: 1rem;
-    /* position: sticky;
-    bottom: 0; */
+  .buttons-bar {
+    padding: 1rem 0;
     background: $body-background-color;
-    box-shadow: inset 0 0.0625em 0.125em rgb(10 10 10 / 5%);
-    margin: 0 -1.5rem;
-    padding: 1rem 1.5rem 0.5rem;
-  }
-
-  #field-image > :global(*) {
-    /* max-height: 45vh; */
+    .button:not(:first-child) {
+      margin-left: 0.5rem;
+    }
   }
 
   @media screen and (max-width: 768px) {
@@ -179,7 +178,10 @@
       bottom: 0;
       left: 0;
       right: 0;
-      padding: 1rem 1rem 0.5rem;
+
+      padding-bottom: 0;
+
+      /* padding: 1rem; */
       z-index: 31; /* above navbar (30) */
       background: $body-background-color;
       overflow: auto;
@@ -187,6 +189,13 @@
       flex-direction: column;
     }
 
+    main.container > * {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+    .section {
+      margin-top: 1rem;
+    }
     .section:first-child {
       padding-top: 0;
       padding-bottom: 0;
@@ -200,9 +209,16 @@
     }
 
     .flex {
-      flex: 1;
-      height: auto;
-      /* max-height: 90vh; */
+      flex-grow: 1;
+      height: 8rem;
+    }
+    .flex-large {
+      height: 17.5rem;
+    }
+
+    .buttons-bar {
+      position: sticky;
+      bottom: 0;
     }
   }
 
