@@ -107,7 +107,6 @@ const initUserContext = () => {
       if ($era == null) return
       if ($user == null) return
       if ($user.era !== $era) {
-        debugger
         user.set(null)
         user.disconnect()
       }
