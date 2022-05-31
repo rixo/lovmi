@@ -108,7 +108,8 @@
         <h1 class="title">Idées fraiches 🍉</h1>
         <div class="subtitle">
           <p>
-            Les idées les <strong>plus récentes</strong>.
+            Les idées les <strong>plus récentes</strong>, et pour lesquelles
+            vous n'avez pas encore voté.
           </p>
         </div>
       </div>
