@@ -92,24 +92,26 @@ const initUserContext = () => {
   }
 
   if (browser) {
-    userGateway
-      .getCurrentUser()
-      .then(($user) => {
-        user.set($user)
-        user.loading.set(false)
-      })
-      .catch((err) => {
-        console.error("Failed to get current user", err)
-        user.loading.set(false)
-      })
+    setTimeout(() => {
+      userGateway
+        .getCurrentUser()
+        .then(($user) => {
+          user.set($user)
+          user.loading.set(false)
+        })
+        .catch((err) => {
+          console.error("Failed to get current user", err)
+          user.loading.set(false)
+        })
 
-    derived([era, user], (x) => x).subscribe(([$era, $user]) => {
-      if ($era == null) return
-      if ($user == null) return
-      if ($user.era !== $era) {
-        user.set(null)
-        user.disconnect()
-      }
+      derived([era, user], (x) => x).subscribe(([$era, $user]) => {
+        if ($era == null) return
+        if ($user == null) return
+        if ($user.era !== $era) {
+          user.set(null)
+          user.disconnect()
+        }
+      })
     })
   }
 
