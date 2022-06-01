@@ -45,17 +45,26 @@ class UserGateway {
 //   }
 // }
 
+const createUser = async ({
+  name,
+  password,
+  _fetch = fetch,
+  _ensureExists = false,
+}) => {
+  const res = await _fetch("/user", {
+    method: "POST",
+    headers: {
+      accept: "application/json",
+      "content-type": "application/json",
+    },
+    body: JSON.stringify({ login: name, password, _ensureExists }),
+  })
+  return await res.json()
+}
+
 class RemoteUserGateway extends UserGateway {
   async createUser({ login, password }) {
-    const res = await fetch("/user", {
-      method: "POST",
-      headers: {
-        accept: "application/json",
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({ login, password }),
-    })
-    const { id, era, name, auth } = await res.json()
+    const { id, era, name, auth } = await createUser({ name: login, password })
     const user = { id, era, name, auth }
     this.setCurrentUser(user)
     return user
