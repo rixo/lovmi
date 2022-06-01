@@ -1,11 +1,9 @@
 import { get, writable, derived } from "svelte/store"
 import { browser } from "$app/env"
 
-import { noop, readOnly } from "$lib/util"
+import { noop } from "$lib/util"
 import { SIGN_IN, SIGN_UP } from "$lib/LoginModal/index.svelte"
 import { getCurrentEra, era } from "$lib/api/settings"
-
-const key = { scope: "lovmi.user" }
 
 const CURRENT_USER = "lovmi:current_user"
 
@@ -15,9 +13,9 @@ class UserGateway {
   }
 
   setCurrentUser(user) {
-    if (!browser) throw new User("Client-side only")
+    if (!browser) throw new Error("Client-side only")
     if (typeof localStorage === "undefined")
-      throw new User("localStorage unsupported")
+      throw new Error("localStorage unsupported")
     localStorage.setItem(CURRENT_USER, JSON.stringify(user))
   }
 
@@ -32,21 +30,20 @@ class UserGateway {
   async disconnect() {
     if (!browser) return
     if (typeof localStorage === "undefined") return
-    const stored = localStorage.getItem(CURRENT_USER)
     localStorage.removeItem(CURRENT_USER)
   }
 }
 
-class FakeUserGateway extends UserGateway {
-  async createUser({ login, password }) {
-    const user = {
-      id: login,
-      name: "@" + login,
-    }
-    this.setCurrentUser(user)
-    return user
-  }
-}
+// class FakeUserGateway extends UserGateway {
+//   async createUser({ login, password }) {
+//     const user = {
+//       id: login,
+//       name: "@" + login,
+//     }
+//     this.setCurrentUser(user)
+//     return user
+//   }
+// }
 
 class RemoteUserGateway extends UserGateway {
   async createUser({ login, password }) {
