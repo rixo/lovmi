@@ -1,33 +1,14 @@
 <script>
-  import { onMount } from "svelte"
   import { goto } from "$app/navigation"
   import Fa from "svelte-fa"
   import { faCheck } from "$lib/icons"
   import { scrollToTop } from "$lib/util/scrollIntoView"
 
   import DrawingPad from "$lib/DrawingPad.svelte"
-  import { getUser } from "$lib/user"
+  import { requireUserOrRedirect } from "$lib/user"
   import { posts } from "$lib/api"
 
-  let me
-
-  onMount(() => {
-    let destroyed = false
-    $getUser()
-      .then((user) => {
-        if (destroyed) return
-        if (!user) goto("/")
-        me = user
-      })
-      .catch((err) => {
-        console.error("Error", err)
-        if (destroyed) return
-        goto("/")
-      })
-    return () => {
-      destroyed = true
-    }
-  })
+  $: me = $requireUserOrRedirect("/")
 
   let values = {}
   let getPadDataURL
