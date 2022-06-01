@@ -84,7 +84,7 @@
       </div> -->
       <div class="navbar-end">
         {#if $isAdmin}
-          <a class="navbar-item" href="/admin">
+          <a class="navbar-item" href="/admin" on:click={closeMenu}>
             <Fa icon={faGavel} class="icon" />
             <span>Admin</span>
           </a>
