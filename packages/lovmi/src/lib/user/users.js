@@ -45,19 +45,14 @@ class UserGateway {
 //   }
 // }
 
-const createUser = async ({
-  name,
-  password,
-  _fetch = fetch,
-  _ensureExists = false,
-}) => {
-  const res = await _fetch("/user", {
+const createUser = async ({ name, password }) => {
+  const res = await fetch("/user", {
     method: "POST",
     headers: {
       accept: "application/json",
       "content-type": "application/json",
     },
-    body: JSON.stringify({ login: name, password, _ensureExists }),
+    body: JSON.stringify({ login: name, password }),
   })
   return await res.json()
 }

@@ -94,26 +94,23 @@
 
       <div class="columns">
         <div class="column">
-          <XSSAttackAdminAction />
+          <h3 class="is-size-4">Vulnérabilité</h3>
+          <div class="control">
+            <AdminPostAction
+              action={changeSettings({ xss_attack_fixed: !$xssAttackFixed })}
+              class="is-outlined {$xssAttackFixed ? 'is-danger' : 'is-success'}"
+            >
+              {#if $xssAttackFixed}
+                Activer la vulnérabilité
+              {:else}
+                Sécuriser le site
+              {/if}
+            </AdminPostAction>
+          </div>
         </div>
         <div class="column">
-          <div class="field">
-            <span class="label">&nbsp;</span>
-            <div class="control">
-              <AdminPostAction
-                action={changeSettings({ xss_attack_fixed: !$xssAttackFixed })}
-                class="is-outlined {$xssAttackFixed
-                  ? 'is-danger'
-                  : 'is-success'}"
-              >
-                {#if $xssAttackFixed}
-                  Activer la vulnérabilité
-                {:else}
-                  Sécuriser le site
-                {/if}
-              </AdminPostAction>
-            </div>
-          </div>
+          <h3 class="is-size-4">Poster une attaque</h3>
+          <XSSAttackAdminAction />
         </div>
       </div>
     </div>

@@ -70,10 +70,10 @@ export const toggleLeaderboard = AdminAction({
   },
 })
 
-export const xssAttack = (attackerName) =>
+export const xssAttack = (attackerName, post) =>
   AdminAction({
     url: "/admin/attacks/xss",
-    body: { attackerName },
+    body: { attacker: attackerName, post },
   })
 
 export const changeSettings = (changes) =>

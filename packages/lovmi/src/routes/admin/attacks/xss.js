@@ -1,6 +1,7 @@
 import { authGuard } from "$lib/admin/auth"
 import * as db from "$lib/_db"
 import { createUser } from "$lib/_db/users"
+import { randomString } from "$lib/util"
 import { createPostRecord } from "$lib/api/posts.util"
 
 const attackScript = (attackerName) => `
@@ -17,10 +18,12 @@ const attackScript = (attackerName) => `
 
 export async function post({ request }) {
   return authGuard(request, async () => {
-    const { attackerName } = await request.json()
+    const { attacker, post } = await request.json()
+
+    const password = randomString()
 
     try {
-      await createUser({ name: attackerName, password: "UBUTetGym6" })
+      await createUser({ name: attacker, password })
     } catch (err) {
       if (err?.response?.status === 409) {
         // that's ok, already exists
@@ -28,7 +31,7 @@ export async function post({ request }) {
         console.error("Failed to create attacker user", err)
         return {
           status: 500,
-          body: `Failed to create attacker user (${attackerName})`,
+          body: `Failed to create attacker user (${attacker})`,
         }
       }
     }
@@ -38,9 +41,9 @@ export async function post({ request }) {
     const record = createPostRecord(
       { eraPeriod },
       {
-        author: attackerName,
-        description: "vou zette tous moche",
-        title: attackScript(attackerName),
+        ...post,
+        author: attacker,
+        title: attackScript(attacker),
       }
     )
 

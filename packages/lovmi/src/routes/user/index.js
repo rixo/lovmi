@@ -1,4 +1,3 @@
-import fetch from "node-fetch"
 import * as db from "$lib/_db"
 import { createUser } from "$lib/_db/users"
 
@@ -14,8 +13,6 @@ export async function post({ request }) {
   const era = String(period).split(".")[0]
 
   const lovmiName = `lovmi__${era}__${name}`
-
-  const id = `org.couchdb.user:${lovmiName}`
 
   try {
     await createUser({ name, password })

@@ -20,16 +20,10 @@
     <p class="help">S'il n'existe pas, il sera créé.</p>
   </div>
   <div class="field">
-    <label for="message" class="label">Message</label>
     <div class="control">
-      <textarea id="message" class="textarea" bind:value={description} />
-    </div>
-  </div>
-  <div class="field is-grouped">
-    <div class="control">
-      <AdminPostAction action={xssAttack(attackerName)} class="button is-link">
-        Créer le post XSS
-      </AdminPostAction>
+      <a href="/admin/post/xss/{attackerName}" class="button is-link">
+        Créer un post XSS
+      </a>
     </div>
   </div>
 </div>

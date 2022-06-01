@@ -7,9 +7,13 @@
   import DrawingPad from "$lib/DrawingPad.svelte"
   import { posts } from "$lib/api"
 
-  export let user
+  export let createPost
 
-  let values = {}
+  export let redirect = "/"
+
+  export let forceTitle = ""
+
+  let values = { title: forceTitle }
   let getPadDataURL
 
   $: canSubmit = Object.values(values).some(Boolean)
@@ -19,10 +23,9 @@
     if (values.hasDrawing) data.image = getPadDataURL()
     if (values.title) data.title = values.title
     if (values.description) data.description = values.description
-    posts
-      .create(user, data)
+    createPost(data)
       .then(() => {
-        goto("/")
+        if (redirect) goto(redirect)
       })
       .catch((err) => {
         console.error("Failed to create post", err)
@@ -56,6 +59,7 @@
         placeholder="Titre"
         id="title"
         bind:value={values.title}
+        readonly={!!forceTitle}
         class="input"
         type="text"
         on:focus={scrollIntoView}
