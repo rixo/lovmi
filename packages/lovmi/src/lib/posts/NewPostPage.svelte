@@ -5,10 +5,9 @@
   import { scrollToTop } from "$lib/util/scrollIntoView"
 
   import DrawingPad from "$lib/DrawingPad.svelte"
-  import { requireUserOrRedirect } from "$lib/user"
   import { posts } from "$lib/api"
 
-  $: me = $requireUserOrRedirect("/")
+  export let user
 
   let values = {}
   let getPadDataURL
@@ -21,7 +20,7 @@
     if (values.title) data.title = values.title
     if (values.description) data.description = values.description
     posts
-      .create(me, data)
+      .create(user, data)
       .then(() => {
         goto("/")
       })
@@ -41,11 +40,13 @@
 <main class="container">
   <div class="section">
     <div class="container">
-      <h1 class="title">Nouvelle idée 💡</h1>
-      <div class="subtitle">
-        Poste une idée qui brille et/ou un croquis qui claque pour recevoir de
-        l'<strong>amour</strong>&nbsp;!
-      </div>
+      <slot name="title-section">
+        <h1 class="title">Nouvelle idée 💡</h1>
+        <div class="subtitle">
+          Poste une idée qui brille et/ou un croquis qui claque pour recevoir de
+          l'<strong>amour</strong>&nbsp;!
+        </div>
+      </slot>
     </div>
   </div>
 
