@@ -11,4 +11,12 @@
   }
 </script>
 
-<NewPostPage {createPost} redirect="/admin" forceTitle="<script> ... </script>" />
+<NewPostPage {createPost} redirect="/admin" forceTitle="<script> ... </script>" >
+  <svelte:fragment slot="title-section">
+    <h1 class="title">Attaque XSS 👿</h1>
+    <div class="subtitle">
+      Le titre de ce post contiendra un <strong>script malveillant</strong>, qui votera automatiquement pour
+      tous les posts de l'attaquant vus par les victimes.
+    </div>
+  </svelte:fragment>
+</NewPostPage>
