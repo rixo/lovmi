@@ -98,27 +98,23 @@
     </div>
 
     <div class="flex" class:flex-large={activeTab === "drawing"}>
-      {#if activeTab == null || activeTab === "drawing"}
-        <div class="field">
-          <DrawingPad
-            bind:getDataURL={getPadDataURL}
-            bind:hasData={values.hasDrawing}
-            on:focus={scrollIntoView}
-          />
-        </div>
-      {/if}
+      <div class="field" class:is-hidden={activeTab !== "drawing"}>
+        <DrawingPad
+          bind:getDataURL={getPadDataURL}
+          bind:hasData={values.hasDrawing}
+          on:focus={scrollIntoView}
+        />
+      </div>
 
-      {#if activeTab == null || activeTab === "message"}
-        <div class="field">
-          <textarea
-            id="description"
-            class="textarea"
-            placeholder="Vous pouvez entrer un message..."
-            bind:value={values.description}
-            on:focus={scrollIntoView}
-          />
-        </div>
-      {/if}
+      <div class="field" class:is-hidden={activeTab !== "message"}>
+        <textarea
+          id="description"
+          class="textarea"
+          placeholder="Vous pouvez entrer un message..."
+          bind:value={values.description}
+          on:focus={scrollIntoView}
+        />
+      </div>
     </div>
 
     <div class="buttons-bar are-medium">

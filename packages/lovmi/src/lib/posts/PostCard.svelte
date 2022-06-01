@@ -3,6 +3,7 @@
   import { faHeartCrack, faHeart, faThumbsDown } from "$lib/icons"
 
   import { getUser } from "$lib/user"
+  import VulnerablePostHtml from "./VulnerablePostHtml.svelte"
 
   export let post
 
@@ -36,7 +37,9 @@
   {/if}
   <div class="card-content">
     {#if post.title}
-      <h2 class="title is-size-4">{post.title}</h2>
+      <h2 class="title is-size-4">
+        <VulnerablePostHtml value={post.title} />
+      </h2>
     {/if}
     <h3 class="subtitle is-size-6">
       <a href="/profile/{post.author}">@{post.author}</a>

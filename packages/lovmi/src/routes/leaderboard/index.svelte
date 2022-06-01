@@ -18,13 +18,13 @@
 
 <div class="section">
   <div class="container">
-    <h1 class="title is-size-1">
-      <div class="icon-text">
-        <span>Classement</span>
+    <h1 class="title is-size-2">
+      <span class="deco-icon">
+        Classement
         <span class="icon trophy">
           <Fa icon={faTrophy} />
         </span>
-      </div>
+      </span>
     </h1>
     <div class="subtitle is-size-4 pt-5">
       <em>Qui</em> a les <strong>meilleures</strong> idées&nbsp;?
@@ -92,6 +92,21 @@
     margin: auto;
   }
 
+  .title {
+    /* white-space: nowrap; */
+  }
+
+  .title .deco-icon {
+    position: relative;
+  }
+  .title .deco-icon .icon {
+    width: 0;
+    display: inline-block;
+    position: absolute;
+    right: -2.5rem;
+    top: 0.9rem;
+  }
+
   .icon.trophy {
     font-size: 0.8em;
     margin: -0.05em 0.75em 0;
@@ -101,5 +116,13 @@
     font-size: 0.8em;
     margin: -0.05em 0.5em 0;
     color: hsl(347, 90%, 76%);
+  }
+
+  /* fix column padding creating overflow on mobile */
+  .column {
+    padding-right: 0;
+  }
+  .columns {
+    margin-right: 0;
   }
 </style>

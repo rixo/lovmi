@@ -1,5 +1,6 @@
 <script>
   import "/node_modules/bulma-pageloader"
+  import { onMount } from "svelte"
   import { scale, slide } from "svelte/transition"
   import { cubicOut, cubicIn } from "svelte/easing"
   import Masonry from "$lib/Masonry.svelte"
@@ -58,7 +59,13 @@
   const setActiveTab = (tab) => {
     window.scroll({ top: 0, behavior: "smooth" })
     activeTab = tab
+    window.location.hash = tab
   }
+
+  onMount(() => {
+    if (!window.location.hash) return
+    activeTab = window.location.hash.slice(1)
+  })
 </script>
 
 <div class="pageloader is-bottom-to-top is-danger" class:is-active={loading}>

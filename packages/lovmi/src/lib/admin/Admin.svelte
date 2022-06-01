@@ -4,10 +4,12 @@
     startNewEra,
     startNewPeriod,
     toggleLeaderboard,
+    changeSettings,
   } from "$lib/admin/actions"
-  import { leaderboardEnabled } from "$lib/api/settings"
+  import { leaderboardEnabled, xssAttackFixed } from "$lib/api/settings"
 
   import AdminPostAction from "./AdminPostAction.svelte"
+  import XSSAttackAdminAction from "./XSSAttackAdminAction.svelte"
 
   const startNewEraState = startNewEra.state
 </script>
@@ -74,15 +76,46 @@
       Déclencher les attaques pour <strong>illustrer le propos</strong>.
     </div>
 
-    <div class="block">
-      <div class="title is-size-4">Attaque XSS</div>
+    <div class="block my-6">
+      <div class="title is-size-4">
+        Attaque XSS
+        {#if $xssAttackFixed}
+          <span class="tag is-success is-light">Sécurisée</span>
+        {:else}
+          <span class="tag is-danger is-light">Vulnérable</span>
+        {/if}
+      </div>
       <p class="subtitle is-size-6">
         <strong>Cross-Site Scripting</strong>&nbsp;: en utilisant un défaut de
         sécurisation dans l'application, nous allons injecter un script
         malicieux sur la page vue par l'utilisateur, pour exécuter des actions à
         sa place.
       </p>
-      <button class="button is-primary">Post XSS</button>
+
+      <div class="columns">
+        <div class="column">
+          <XSSAttackAdminAction />
+        </div>
+        <div class="column">
+          <div class="field">
+            <span class="label">&nbsp;</span>
+            <div class="control">
+              <AdminPostAction
+                action={changeSettings({ xss_attack_fixed: !$xssAttackFixed })}
+                class="is-outlined {$xssAttackFixed
+                  ? 'is-danger'
+                  : 'is-success'}"
+              >
+                {#if $xssAttackFixed}
+                  Activer la vulnérabilité
+                {:else}
+                  Sécuriser le site
+                {/if}
+              </AdminPostAction>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="block">
@@ -104,9 +137,9 @@
     <div class="subtitle">
       Tout remettre à zéro pour commencer une nouvelle session.
     </div>
-    <AdminPostAction action={startNewEra} class="is-danger"
-      >Remettre à zéro</AdminPostAction
-    >
+    <AdminPostAction action={startNewEra} class="is-danger">
+      Remettre à zéro
+    </AdminPostAction>
   </div>
 </div>
 

@@ -3,9 +3,7 @@ import { browser } from "$app/env"
 
 import { readable, derived } from "$lib/util/store"
 
-import { getUserAuth } from "$lib/user"
-
-import { render } from "./posts.util"
+import { createPostRecord } from "./posts.util"
 
 const byTypeRegex = /^[\d.]+\/([^/]+)(?:\/|$)/
 
@@ -60,7 +58,8 @@ export const PouchDBGateway = () => {
     const { default: PouchDB } = await import("$lib/pouch")
     set(
       new PouchDB(dbHost + "/lovmi-posts", {
-        fetch(url, opts) {
+        async fetch(url, opts) {
+          const { getUserAuth } = await import("$lib/user")
           const auth = getUserAuth()
           if (auth) {
             opts.headers.set("authorization", auth)
@@ -226,14 +225,8 @@ export const PouchDBGateway = () => {
 
   const add = async (post) => {
     const db = await getPostsDb()
-    const era = await getCurrentEraPeriod()
-    const record = {
-      ...post,
-      _id: `${era}/posts/${post.author}/${new Date().getTime()}`,
-      description_html: post.description && render(post.description),
-      votes: {},
-      score: 0,
-    }
+    const eraPeriod = await getCurrentEraPeriod()
+    const record = createPostRecord({ eraPeriod }, post)
     return await db.post(record)
   }
 
@@ -266,6 +259,7 @@ export const PouchDBGateway = () => {
     pastResults,
     era: era$,
     getCurrentEra,
+    settings,
     leaderboardEnabled,
     isLeaderboardEnabled,
   }
