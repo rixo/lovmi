@@ -36,8 +36,6 @@
   }
 
   let activeTab = "drawing"
-
-  const handleTabClick = (e) => {}
 </script>
 
 <main class="container">
