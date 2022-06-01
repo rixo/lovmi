@@ -142,6 +142,7 @@ export const PouchDBGateway = () => {
 
       try {
         const feed = db.liveFind({
+          limit: 999999,
           selector: {
             $or: [
               {
