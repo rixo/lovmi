@@ -87,7 +87,8 @@
           <span class="icon is-small">
             <Fa icon={faSeedling} />
           </span>
-          <span>Idées fraiches</span>
+          <span class="is-hidden-tablet">Fraîches</span>
+          <span class="is-hidden-mobile">Idées fraiches</span>
         </a>
       </li>
       <li class:is-active={activeTab === TAB_HOT}>
@@ -95,12 +96,14 @@
           <span class="icon is-small">
             <Fa icon={faPepperHot} />
           </span>
-          <span>Idées hots</span>
+          <span class="is-hidden-tablet">Hot</span>
+          <span class="is-hidden-mobile">Idées hot</span>
         </a>
       </li>
       <li class:is-active={activeTab === TAB_ALL}>
         <a href on:click|preventDefault={() => setActiveTab(TAB_ALL)}>
-          Toutes les idées
+          <span class="is-hidden-tablet">Toutes</span>
+          <span class="is-hidden-mobile">Toutes les idées</span>
         </a>
       </li>
     </ul>
