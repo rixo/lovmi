@@ -26,13 +26,11 @@
 
 <div class="modal" class:is-active={$loginModal}>
   <div class="modal-background" on:click={close} />
-  <div class="modal-card">
-    {#if screen === SIGN_IN}
-      <Signin {close} {goToSignup} {goToLostPassword} />
-    {:else if screen === SIGN_UP}
-      <Signup {close} {createUser} />
-    {:else if screen === LOST_PASSWORD}
-      <LostPassword {close} />
-    {/if}
-  </div>
+  {#if screen === SIGN_IN}
+    <Signin {close} {goToSignup} {goToLostPassword} />
+  {:else if screen === SIGN_UP}
+    <Signup {close} {createUser} />
+  {:else if screen === LOST_PASSWORD}
+    <LostPassword {close} />
+  {/if}
 </div>

@@ -27,7 +27,7 @@
   }
 </script>
 
-<form on:submit|preventDefault={submit}>
+<form class="modal-card" on:submit|preventDefault={submit}>
   <header class="modal-card-head">
     <p class="modal-card-title">Connexion</p>
     <button
