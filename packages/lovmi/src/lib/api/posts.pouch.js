@@ -5,6 +5,34 @@ import { readable, derived } from "$lib/util/store"
 
 import { createPostRecord } from "./posts.util"
 
+const USE_LOCAL = true
+
+const changesSelector = (eraPeriod) => {
+  const era = eraPeriod.split(".")[0]
+  return {
+    $or: [
+      {
+        _id: {
+          $gt: "$",
+          $lt: "$\uffff",
+        },
+      },
+      {
+        _id: {
+          $gt: `${era}/`,
+          $lt: `${era}/\uffff`,
+        },
+      },
+      {
+        _id: {
+          $gt: `${eraPeriod}/`,
+          $lt: `${eraPeriod}/\uffff`,
+        },
+      },
+    ],
+  }
+}
+
 const byTypeRegex = /^[\d.]+\/([^/]+)(?:\/|$)/
 
 const splitDocsByType = ($allDocs) => {
@@ -56,8 +84,9 @@ export const PouchDBGateway = () => {
 
   const db$ = readable(null, async (set) => {
     const { default: PouchDB } = await import("$lib/pouch")
-    set(
-      new PouchDB(dbHost + "/lovmi-posts", {
+
+    if (USE_LOCAL) {
+      const remote = new PouchDB(dbHost + "/lovmi-posts", {
         async fetch(url, opts) {
           const { getUserAuth } = await import("$lib/user")
           const auth = getUserAuth()
@@ -67,7 +96,59 @@ export const PouchDBGateway = () => {
           return fetch(url, opts)
         },
       })
-    )
+
+      const remoteSettings = await remote.get("$settings")
+
+      const eraPeriod = remoteSettings.current_era
+
+      const local = new PouchDB("lovmi")
+
+      try {
+        await local.get("$settings")
+        set(local)
+      } catch (err) {
+        if (err?.status !== 404) {
+          console.error("db error", err)
+        }
+      }
+
+      const sync = local
+        .sync(remote, {
+          live: true,
+          retry: true,
+          selector: changesSelector(eraPeriod),
+        })
+        .on("error", (err) => {
+          console.log("PouchDB sync error", err)
+        })
+
+      {
+        const handleChange = (info) => {
+          if (info.change.docs.some((doc) => doc._id === "$settings")) {
+            sync.removeListener("change", handleChange)
+            set(local)
+          }
+        }
+        sync.on("change", handleChange)
+      }
+
+      return () => {
+        sync.cancel()
+      }
+    } else {
+      set(
+        new PouchDB(dbHost + "/lovmi-posts", {
+          async fetch(url, opts) {
+            const { getUserAuth } = await import("$lib/user")
+            const auth = getUserAuth()
+            if (auth) {
+              opts.headers.set("authorization", auth)
+            }
+            return fetch(url, opts)
+          },
+        })
+      )
+    }
   })
 
   const getPostsDb = async () =>
@@ -138,33 +219,10 @@ export const PouchDBGateway = () => {
       if (!db) return
       if ($eraAndPeriod == null) return
 
-      const era = String($eraAndPeriod).split(".")[0]
-
       try {
         const feed = db.liveFind({
           limit: 999999,
-          selector: {
-            $or: [
-              {
-                _id: {
-                  $gt: "$",
-                  $lt: "$\uffff",
-                },
-              },
-              {
-                _id: {
-                  $gt: `${era}/`,
-                  $lt: `${era}/\uffff`,
-                },
-              },
-              {
-                _id: {
-                  $gt: `${$eraAndPeriod}/`,
-                  $lt: `${$eraAndPeriod}/\uffff`,
-                },
-              },
-            ],
-          },
+          selector: changesSelector($eraAndPeriod),
           aggregate: true,
         })
 
