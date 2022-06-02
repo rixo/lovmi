@@ -88,7 +88,7 @@
           on:click|preventDefault={goToSignup}
           class="has-text-info has-text-weight-bold is-link"
         >
-          Entrer dans le game 🕶
+          Entrer dans le game&nbsp;🕶
         </a>
       </p>
     </div>
