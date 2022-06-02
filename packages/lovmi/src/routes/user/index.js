@@ -8,16 +8,17 @@ const basicAuth = (login, password) => `Basic ${btoa(login + ":" + password)}`
 export async function post({ request }) {
   const { login, password } = await request.json()
 
-  const name = login.toLowerCase().trim()
+  const trimmedName = login.trim()
+  const lcName = trimmedName.toLowerCase()
 
   const { current_era: period } = await db.get("$settings")
 
   const era = String(period).split(".")[0]
 
-  const lovmiName = `lovmi__${era}__${name}`
+  const lovmiName = `lovmi__${era}__${lcName}`
 
   try {
-    await createUser({ name, password })
+    await createUser({ name: lcName, password })
   } catch (err) {
     const res = err.response
     if (res) {
@@ -42,6 +43,11 @@ export async function post({ request }) {
 
   return {
     status: 200,
-    body: { id: name, era, name, auth: basicAuth(lovmiName, password) },
+    body: {
+      id: lcName,
+      era,
+      name: trimmedName,
+      auth: basicAuth(lovmiName, password),
+    },
   }
 }

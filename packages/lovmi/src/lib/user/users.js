@@ -206,7 +206,11 @@ const basicAuth = (login, password) => `Basic ${btoa(login + ":" + password)}`
 
 export const signin = async (name, password) => {
   const era = await getCurrentEra()
-  const username = `lovmi__${era}__${name}`
+
+  const trimmedName = name.trim()
+  const lcName = trimmedName.toLowerCase()
+  const username = `lovmi__${era}__${lcName}`
+
   const res = await fetch(`${import.meta.env.VITE_USER_DB_HOST}/_session`, {
     method: "POST",
     headers: {
@@ -214,14 +218,22 @@ export const signin = async (name, password) => {
     },
     body: JSON.stringify({ name: username, password }),
   })
+
   if (res.ok) {
-    const user = { id: name, name, era, auth: basicAuth(username, password) }
+    const user = {
+      id: lcName,
+      name: trimmedName,
+      era,
+      auth: basicAuth(username, password),
+    }
     userGateway.setCurrentUser(user)
     ctx.user.set(user)
     return { success: true }
   }
+
   if (res.status === 401) {
     return { success: false, message: "Identifiant ou mot de passe incorrect." }
   }
+
   return { success: false, message: "Une erreur est survenue." }
 }

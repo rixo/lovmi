@@ -34,6 +34,7 @@
 
   const submit = () => {
     if (!validate()) return
+    error = ""
     createUser({ login, password })
       .then(close)
       .catch((err) => {
