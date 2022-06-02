@@ -165,7 +165,7 @@ Taken from: https://github.com/janzheng/svelte-masonry/blob/9f4f837e9cbe5fc04191
     grid-template-rows: masonry;
     justify-content: center;
     grid-gap: var(--grid-gap);
-    padding: var(--grid-gap);
+    /* padding: var(--grid-gap); */
   }
   .__grid--masonry > :global(*) {
     align-self: start;

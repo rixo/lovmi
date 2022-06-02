@@ -32,11 +32,14 @@
     <h2 class="title">
       Les idées de <strong class="has-text-primary">{user}</strong>
     </h2>
-    <PostsList
-      user={userCtx.user}
-      loading={$loading}
-      error={$error}
-      posts={items}
-    />
   </div>
+</div>
+
+<div class="container">
+  <PostsList
+    user={userCtx.user}
+    loading={$loading}
+    error={$error}
+    posts={items}
+  />
 </div>
