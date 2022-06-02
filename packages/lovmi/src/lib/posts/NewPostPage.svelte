@@ -18,17 +18,23 @@
 
   $: canSubmit = Object.values(values).some(Boolean)
 
+  let submitting = false
+
   const submit = () => {
     const data = {}
     if (values.hasDrawing) data.image = getPadDataURL()
     if (values.title) data.title = values.title
     if (values.description) data.description = values.description
+    submitting = true
     createPost(data)
       .then(() => {
         if (redirect) goto(redirect)
       })
       .catch((err) => {
         console.error("Failed to create post", err)
+      })
+      .finally(() => {
+        submitting = false
       })
   }
 
@@ -102,7 +108,10 @@
     </div>
 
     <div class="buttons-bar are-medium">
-      <button class="submit button is-medium is-success" disabled={!canSubmit}>
+      <button
+        class="submit button is-medium is-success"
+        disabled={!canSubmit || submitting}
+      >
         <span class="icon">
           <Fa icon={faCheck} />
         </span>

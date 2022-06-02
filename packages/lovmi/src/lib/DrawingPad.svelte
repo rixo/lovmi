@@ -30,7 +30,10 @@
     signaturePad.addEventListener("endStroke", updateHasData)
   })
 
-  const handleResize = (e) => {
+  let maxWidth = 0
+  let maxHeight = 0
+
+  const handleResize = () => {
     // guard: size not changed
     if (width === canvas.offsetWidth && height === canvas.offsetHeight) return
 
@@ -44,16 +47,26 @@
     canvas.width = width * ratio
     canvas.height = height * ratio
 
+    maxWidth = Math.max(canvas.width, maxWidth)
+    maxHeight = Math.max(canvas.height, maxHeight)
+
     canvas.getContext("2d").scale(ratio, ratio)
 
     signaturePad.fromData(data)
-    // signaturePad.clear()
   }
 
   export const getDataURL = () => {
     if (!signaturePad) return
+
+    const data = signaturePad.toData()
+
+    canvas.style.opacity = 0
+    canvas.style.position = "absolute"
+    canvas.width = maxWidth
+    canvas.height = maxHeight
+    signaturePad.fromData(data)
+
     return getCroppedDataURL(canvas)
-    return signaturePad.toDataURL("image/svg+xml")
   }
 
   const updateHasData = () => {
@@ -88,22 +101,6 @@
     signaturePad.penColor = color
   }
 
-  const handleKeydown = (e) => {
-    // if (e.ctrlKey) {
-    //   if (e.key === "z") {
-    //     if (e.shiftKey) {
-    //       redo()
-    //     } else {
-    //       undo()
-    //     }
-    //     e.preventDefault()
-    //   } else if (e.key === "y") {
-    //     redo()
-    //     e.preventDefault()
-    //   }
-    // }
-  }
-
   const colors = [
     "black",
     "crimson",
@@ -121,8 +118,6 @@
 </script>
 
 <svelte:window on:resize={handleResize} />
-
-<svelte:body on:keydown={handleKeydown} />
 
 <div class="block">
   <div class="buttons">
