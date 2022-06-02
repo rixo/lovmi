@@ -54,6 +54,13 @@ const createUser = async ({ name, password }) => {
     },
     body: JSON.stringify({ login: name, password }),
   })
+
+  if (!res.ok) {
+    const error = new Error("Failed to create user")
+    error.response = res
+    throw error
+  }
+
   return await res.json()
 }
 

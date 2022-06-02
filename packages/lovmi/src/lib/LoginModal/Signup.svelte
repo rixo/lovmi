@@ -30,12 +30,22 @@
     return Object.keys(errors).length === 0
   }
 
+  let error = ""
+
   const submit = () => {
     if (!validate()) return
     createUser({ login, password })
       .then(close)
       .catch((err) => {
-        console.error("Failed to create user", err)
+        if (err?.response?.status === 409) {
+          error = "Ce nom d'utilisateur est déjà utilisé."
+        } else {
+          console.error("Failed to create user", err)
+          error = `
+            Ça n'a pas marché. Pour une raison totalement indépendante de notre
+            volontée. Réessayez un coup, peut-être, pour voir ?
+          `
+        }
       })
   }
 </script>
@@ -59,6 +69,9 @@
         >&nbsp;! <span class="sparkles">✨</span>
       </p>
     </div>
+    {#if error}
+      <p class="block has-text-danger">{error}</p>
+    {/if}
     <div class="field">
       <label for="login" class="label">Identifiant</label>
       <div class="control has-icons-right">

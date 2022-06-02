@@ -6,7 +6,9 @@ const btoa = (string) => Buffer.from(string).toString("base64")
 const basicAuth = (login, password) => `Basic ${btoa(login + ":" + password)}`
 
 export async function post({ request }) {
-  const { login: name, password } = await request.json()
+  const { login, password } = await request.json()
+
+  const name = login.toLowerCase().trim()
 
   const { current_era: period } = await db.get("$settings")
 
