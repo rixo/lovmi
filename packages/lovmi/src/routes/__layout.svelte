@@ -44,7 +44,8 @@
       </a> for 2itech.
     </p>
     <p class="is-size-7">
-      Ce site est une satire. Ne lui confiez pas vos brouzoufs.
+      Ce site est une satire. Ne lui confiez pas vos brouzoufs. Ni vos données
+      personnelles.
     </p>
   </div>
 </footer>
