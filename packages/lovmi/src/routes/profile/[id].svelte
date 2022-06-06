@@ -21,7 +21,7 @@
         {user}
       </p>
       <p class="subtitle">
-        The <strong>greatest</strong> user since sliced bread.
+        Un utilisateur <strong>vraiment super</strong>.
       </p>
     </div>
   </div>
@@ -36,10 +36,14 @@
 </div>
 
 <div class="container">
-  <PostsList
-    user={userCtx.user}
-    loading={$loading}
-    error={$error}
-    posts={items}
-  />
+  {#if items.length > 0}
+    <PostsList
+      user={userCtx.user}
+      loading={$loading}
+      error={$error}
+      posts={items}
+    />
+  {:else}
+    <p>C'est plein de vide.</p>
+  {/if}
 </div>
