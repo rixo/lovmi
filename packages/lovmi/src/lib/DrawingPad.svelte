@@ -60,8 +60,6 @@
 
     const data = signaturePad.toData()
 
-    canvas.style.opacity = 0
-    canvas.style.position = "absolute"
     canvas.width = maxWidth
     canvas.height = maxHeight
     signaturePad.fromData(data)
