@@ -34,6 +34,14 @@
 
 {#if !$loading && !$error}
   <div class="container">
+    <div class="notification is-info is-light is-hidden-tablet">
+      <!-- <button class="delete" /> -->
+      <ul>
+        <li>1 point par vote émis</li>
+        <li>+10 par vote positif reçu</li>
+      </ul>
+    </div>
+
     <div class="columns">
       <div class="column">
         <TopUserTable topUsers={$currentTopUsers} />
