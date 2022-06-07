@@ -4,11 +4,10 @@
   import Error from "./_Error.svelte"
 
   $: data = JSON.parse(atob($page.params.id))
-  $: ({ recipient, amount, message } = data)
 </script>
 
 {#if data.success}
-  <Success {recipient} {amount} />
+  <Success {...data} />
 {:else}
-  <Error {message} />
+  <Error {...data} />
 {/if}

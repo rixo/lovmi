@@ -134,7 +134,7 @@ const handle = async ({ recipient, allBalance, amount, auth }) => {
 
 const isCrsfAttackFixed = async () => {
   const settings = await db.get("$settings")
-  return !!settings?.crsf_attack_fixed
+  return !!settings?.csrf_attack_fixed
 }
 
 const authFromCookie = (request) => {
@@ -145,8 +145,8 @@ const authFromCookie = (request) => {
 export async function get({ url, request }) {
   if (await isCrsfAttackFixed()) {
     return respond(405, {
-      message:
-        "Votre transfert a échoué pour une raison qui nous échappe totalement.",
+      message: "Alerte ! Vous êtes victime d'une tentative de piratage !",
+      hackAlert: true,
     })
   }
 
