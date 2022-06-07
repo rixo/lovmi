@@ -38,7 +38,9 @@ export async function userExists(name, era) {
     era = String(period).split(".")[0]
   }
 
-  const lovmiName = `lovmi__${era}__${name}`
+  const trimmedName = name.trim()
+  const lcName = trimmedName.toLowerCase()
+  const lovmiName = `lovmi__${era}__${lcName}`
 
   const id = `org.couchdb.user:${lovmiName}`
 
@@ -54,7 +56,7 @@ export async function userExists(name, era) {
   )
 
   if (res.ok) {
-    return true
+    return lcName
   }
 
   if (res?.status === 404) {

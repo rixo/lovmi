@@ -40,7 +40,7 @@ const respond = (status, body) => {
   }
 }
 
-const handle = async ({ recipient, allBalance, amount, auth }) => {
+const handle = async ({ recipient: _recipient, allBalance, amount, auth }) => {
   try {
     if (!auth) {
       return {
@@ -61,7 +61,7 @@ const handle = async ({ recipient, allBalance, amount, auth }) => {
       }
     }
 
-    if (!recipient) {
+    if (!_recipient) {
       return {
         status: 400,
         body: {
@@ -82,15 +82,17 @@ const handle = async ({ recipient, allBalance, amount, auth }) => {
     const settings = await db.get("$settings")
     const [era, period] = String(settings.current_era).split(".")
 
-    if (recipient === user) {
-      return respond(409, {
-        message: "Rien ne sert de transférer à soi-même. (Assez évident.)",
+    const recipient = await userExists(_recipient, era)
+
+    if (!recipient) {
+      return respond(404, {
+        message: `Utilisateur inconnu : ${recipient}.`,
       })
     }
 
-    if (!(await userExists(recipient, era))) {
-      return respond(404, {
-        message: `Utilisateur inconnu : ${recipient}.`,
+    if (recipient === user) {
+      return respond(409, {
+        message: "Rien ne sert de transférer à soi-même. (Assez évident.)",
       })
     }
 
