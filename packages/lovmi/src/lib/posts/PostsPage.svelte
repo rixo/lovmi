@@ -173,11 +173,15 @@
     top: 56px;
     z-index: 29;
     background: $body-background-color;
-    padding-top: 0.5rem;
-    margin-left: -1.5rem;
-    margin-right: -1.5rem;
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
+  }
+
+  @media screen and (min-width: 1024px) {
+    .tabs {
+      margin-left: -1.5rem;
+      margin-right: -1.5rem;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
   }
 
   @media screen and (max-width: 768px) {
