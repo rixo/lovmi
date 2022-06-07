@@ -104,6 +104,13 @@ const handle = async ({ recipient, allBalance, amount, auth }) => {
       })
     }
 
+    if (actualAmount === 0) {
+      return respond(403, {
+        message:
+          "Opération stupide : vous avez demandé à transférer rien du tout.",
+      })
+    }
+
     await transfert({
       era,
       period,
