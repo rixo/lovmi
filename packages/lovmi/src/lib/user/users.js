@@ -17,6 +17,7 @@ class UserGateway {
     if (typeof localStorage === "undefined")
       throw new Error("localStorage unsupported")
     localStorage.setItem(CURRENT_USER, JSON.stringify(user))
+    document.cookie = `lovmi-user=${btoa(user.auth)}`
   }
 
   async getCurrentUser() {
@@ -24,13 +25,17 @@ class UserGateway {
     if (typeof localStorage === "undefined") return
     const stored = localStorage.getItem(CURRENT_USER)
     if (!stored) return null
-    return JSON.parse(stored)
+    const user = JSON.parse(stored)
+    document.cookie = `lovmi-user=${btoa(user.auth)}`
+    return user
   }
 
   async disconnect() {
     if (!browser) return
     if (typeof localStorage === "undefined") return
     localStorage.removeItem(CURRENT_USER)
+    document.cookie =
+      "lovmi-user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
   }
 }
 
@@ -172,6 +177,8 @@ const initUserContext = () => {
 }
 
 const ctx = initUserContext()
+
+export const user = ctx.user
 
 export const getUserContext = () => ctx
 

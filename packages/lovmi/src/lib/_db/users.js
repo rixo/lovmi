@@ -31,3 +31,35 @@ export async function createUser({ name, password }) {
     throw Object.assign(new Error("HTTP error"), { response: res })
   }
 }
+
+export async function userExists(name, era) {
+  if (!era) {
+    const { current_era: period } = await db.get("$settings")
+    era = String(period).split(".")[0]
+  }
+
+  const lovmiName = `lovmi__${era}__${name}`
+
+  const id = `org.couchdb.user:${lovmiName}`
+
+  const res = await fetch(
+    `${process.env.VITE_USER_DB_HOST}/_users/${encodeURIComponent(id)}`,
+    {
+      method: "GET",
+      headers: {
+        "content-type": "application/json",
+        Authorization: process.env.DB_POSTS_ADMIN_AUTH,
+      },
+    }
+  )
+
+  if (res.ok) {
+    return true
+  }
+
+  if (res?.status === 404) {
+    return false
+  }
+
+  throw new Error("Failed to get user: " + res.status)
+}

@@ -12,8 +12,13 @@
   export let redirect = "/"
 
   export let forceTitle = ""
+  export let initialTitle = ""
+  export let initialMessage = ""
 
-  let values = { title: forceTitle }
+  let values = {
+    title: forceTitle || initialTitle,
+    description: initialMessage,
+  }
   let getPadDataURL
 
   $: canSubmit = Object.values(values).some(Boolean)

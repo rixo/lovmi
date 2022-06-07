@@ -16,3 +16,8 @@ export const xssAttackFixed = derived(
   settings,
   ($settings) => $settings?.xss_attack_fixed
 )
+
+export const csrfAttackFixed = derived(
+  settings,
+  ($settings) => $settings?.csrf_attack_fixed
+)

@@ -1,8 +1,26 @@
 <script>
   import { Fa, faBuildingColumns, faRightLeft } from "$lib/icons"
   import Brouzoufs from "$lib/Brouzoufs.svelte"
+  import { user } from "$lib/api/user"
 
   import TransfertModal from "./TransfertModal.svelte"
+
+  export let account
+
+  let modalActive
+
+  const showTransfertModal = () => {
+    modalActive = true
+  }
+
+  const handleCloseModal = () => {
+    modalActive = false
+  }
+
+  const formatPeriod = (period) => {
+    if (period == null) return ""
+    return "Jour " + (parseInt(period) + 1)
+  }
 </script>
 
 <div class="section">
@@ -21,7 +39,7 @@
           <div class="card-content has-text-centered">
             <!-- <div class="title is-size-4 has-text-centered">Solde</div> -->
             <p class="is-size-3 has-text-primary has-text-weight-bold">
-              <Brouzoufs value="0.00" />
+              <Brouzoufs value={account.balance} />
             </p>
             <p>Votre solde</p>
           </div>
@@ -34,7 +52,11 @@
       <h3 class="is-size-4 mb-2">Opérations</h3>
 
       <div class="block">
-        <button type="button" class="button is-success">
+        <button
+          type="button"
+          class="button is-success"
+          on:click={showTransfertModal}
+        >
           <span class="icon">
             <Fa icon={faRightLeft} />
           </span>
@@ -47,24 +69,38 @@
           <tr>
             <th>Date</th>
             <th>Origine</th>
-            <th>Crédit</th>
-            <th>Débit</th>
+            <th>Bénéficiaire</th>
+            <th>Montant</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>01/01/2001</td>
-            <td>Lovmi</td>
-            <td class="has-text-right	is-family-monospace	">0.00</td>
-            <td class="has-text-right	is-family-monospace	">0.00</td>
-          </tr>
+          {#each account.operations as op}
+            <tr>
+              <td>{formatPeriod(op.period)}</td>
+              <td class:is-me={op.from === $user.id}>{op.from}</td>
+              <td class:is-me={op.to === $user.id}>{op.to}</td>
+              <td
+                class="has-text-right	is-family-monospace"
+                class:has-text-success={op.amount > 0}
+                class:has-text-danger={op.amount < 0}
+              >
+                <Brouzoufs raw value={op.amount} />
+              </td>
+            </tr>
+          {:else}
+            <tr>
+              <td colspan="4" class="has-text-centered has-text-grey">
+                Aucun mouvements
+              </td>
+            </tr>
+          {/each}
         </tbody>
         <tfoot>
           <th colspan="2" class="has-text-right">
             <strong>Solde</strong>
           </th>
           <th colspan="2" class="has-text-centered is-family-monospace	">
-            <strong>0.00</strong>
+            <strong><Brouzoufs raw value={account.balance} /></strong>
           </th>
         </tfoot>
       </table>
@@ -72,4 +108,13 @@
   </div>
 </div>
 
-<TransfertModal />
+{#if modalActive}
+  <TransfertModal balance={account.balance} onClose={handleCloseModal} />
+{/if}
+
+<style>
+  td.is-me {
+    font-weight: bold;
+    color: #8a4d76;
+  }
+</style>

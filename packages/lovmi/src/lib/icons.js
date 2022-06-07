@@ -1,6 +1,9 @@
 export { default as Fa } from "svelte-fa"
 
 export {
+  faAt,
+  faBuildingColumns,
+  faBitcoinSign,
   faCheck,
   faCirclePlus,
   faDoorOpen,
@@ -15,6 +18,7 @@ export {
   faPepperHot,
   faPiggyBank,
   faPoop,
+  faRightLeft,
   faRotateLeft,
   faRotateRight,
   faSeedling,

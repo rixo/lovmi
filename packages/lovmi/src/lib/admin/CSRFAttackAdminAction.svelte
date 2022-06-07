@@ -1,5 +1,7 @@
 <script>
-  let attackerName = "atakor"
+  import AdminPostAction from "./AdminPostAction.svelte"
+
+  let attackerName = "admin"
   let description = "vou zette tous moche"
 </script>
 
@@ -18,8 +20,8 @@
   </div>
   <div class="field">
     <div class="control">
-      <a href="/admin/post/xss/{attackerName}" class="button is-link">
-        Créer un post XSS
+      <a href="/admin/post/csrf/{attackerName}" class="button is-link">
+        Créer un post CSRF
       </a>
     </div>
   </div>

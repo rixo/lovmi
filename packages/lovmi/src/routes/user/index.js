@@ -11,6 +11,19 @@ export async function post({ request }) {
   const trimmedName = login.trim()
   const lcName = trimmedName.toLowerCase()
 
+  if (/[/$]/.test(lcName)) {
+    return {
+      status: 400,
+      body: { reason: "Forbidden character" },
+    }
+  }
+  if (lcName === "lovmi") {
+    return {
+      status: 400,
+      body: { reason: "Forbidden username" },
+    }
+  }
+
   const { current_era: period } = await db.get("$settings")
 
   const era = String(period).split(".")[0]

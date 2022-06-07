@@ -15,7 +15,6 @@
     derived(xssAttackFixed, passthrough).subscribe((_xssAttackFixed) => {
       if (_xssAttackFixed === false) vulnerable = true
       if (_xssAttackFixed === true && vulnerable) window.location.reload()
-      console.log(_xssAttackFixed, vulnerable)
     })
   }
 </script>

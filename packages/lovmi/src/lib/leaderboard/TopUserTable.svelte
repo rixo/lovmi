@@ -21,9 +21,7 @@
         <abbr title="1 point par vote émis">Votes émis</abbr>
       </th>
       <th colspan="2" class="is-hidden-mobile has-text-centered">
-        <abbr title="+10 par vote positif reçu, -10 par vote négatif">
-          Votes reçus
-        </abbr>
+        <abbr title="+10 par vote positif reçu">Votes reçus</abbr>
       </th>
       <th class="has-text-centered">Score</th>
       {#if showGain}

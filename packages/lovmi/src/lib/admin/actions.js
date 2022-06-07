@@ -76,6 +76,12 @@ export const xssAttack = (attackerName, post) =>
     body: { attacker: attackerName, post },
   })
 
+export const csrfAttack = (attackerName, post) =>
+  AdminAction({
+    url: "/admin/attacks/csrf",
+    body: { attacker: attackerName, post },
+  })
+
 export const changeSettings = (changes) =>
   AdminAction({
     url: "/admin/settings",

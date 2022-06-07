@@ -6,10 +6,15 @@
     toggleLeaderboard,
     changeSettings,
   } from "$lib/admin/actions"
-  import { leaderboardEnabled, xssAttackFixed } from "$lib/api/settings"
+  import {
+    leaderboardEnabled,
+    xssAttackFixed,
+    csrfAttackFixed,
+  } from "$lib/api/settings"
 
   import AdminPostAction from "./AdminPostAction.svelte"
   import XSSAttackAdminAction from "./XSSAttackAdminAction.svelte"
+  import CSRFAttackAdminAction from "./CSRFAttackAdminAction.svelte"
 
   const startNewEraState = startNewEra.state
 </script>
@@ -116,14 +121,48 @@
     </div>
 
     <div class="block">
-      <div class="title is-size-4">Attaque CSRF</div>
-      <div class="subtitle is-size-6">
-        <strong>Cross-Site Request Forgery</strong>&nbsp;: à l'aide d'un peu
-        d'ingénierie sociale (un lien aguichant), nous allons exécuter une
-        action à la place de l'utilisateur en utilisant les droits de sa session
-        actuelle.
+      <div class="block my-6">
+        <div class="title is-size-4">
+          Attaque CSRF
+          {#if $csrfAttackFixed}
+            <span class="tag is-success is-light">Sécurisée</span>
+          {:else}
+            <span class="tag is-danger is-light">Vulnérable</span>
+          {/if}
+        </div>
+        <div class="subtitle is-size-6">
+          <strong>Cross-Site Request Forgery</strong>&nbsp;: à l'aide d'un peu
+          d'ingénierie sociale (un lien aguichant), nous allons exécuter une
+          action à la place de l'utilisateur en utilisant les droits de sa
+          session actuelle.
+        </div>
+
+        <div class="columns">
+          <div class="column">
+            <h3 class="is-size-4">Vulnérabilité</h3>
+            <div class="control">
+              <AdminPostAction
+                action={changeSettings({
+                  csrf_attack_fixed: !$csrfAttackFixed,
+                })}
+                class="is-outlined {$csrfAttackFixed
+                  ? 'is-danger'
+                  : 'is-success'}"
+              >
+                {#if $csrfAttackFixed}
+                  Activer la vulnérabilité
+                {:else}
+                  Sécuriser le site
+                {/if}
+              </AdminPostAction>
+            </div>
+          </div>
+          <div class="column">
+            <h3 class="is-size-4">Poster une attaque</h3>
+            <CSRFAttackAdminAction />
+          </div>
+        </div>
       </div>
-      <button class="button is-primary">Post CSRF</button>
     </div>
   </div>
 </div>

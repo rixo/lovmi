@@ -40,11 +40,16 @@ const splitDocsByType = ($allDocs) => {
     posts: [],
     votes: [],
     results: [],
+    bank: [],
   }
   for (const doc of $allDocs) {
     const eraTypeMatch = byTypeRegex.exec(doc._id)
     if (!eraTypeMatch) continue
     const type = eraTypeMatch[1]
+    if (!docs[type]) {
+      console.warn("Retrieved doc of unknown type: %s", type)
+      continue
+    }
     docs[type].push(doc)
   }
   return docs
@@ -256,6 +261,8 @@ export const PouchDBGateway = () => {
 
   const results = derived(docsByType, ($docs) => $docs.results)
 
+  const bankOperations = derived(docsByType, ($docs) => $docs.bank)
+
   const postsWithVotes = derived([posts, votes], ([$posts, $votes]) =>
     mergePostsVotes($posts, $votes)
   )
@@ -321,5 +328,6 @@ export const PouchDBGateway = () => {
     settings,
     leaderboardEnabled,
     isLeaderboardEnabled,
+    bankOperations,
   }
 }
