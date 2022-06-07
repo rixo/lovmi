@@ -2,7 +2,7 @@
   import Fa from "svelte-fa"
   import {
     faUser,
-    faDoorOpen,
+    faBuildingColumns,
     faCirclePlus,
     faTrophy,
     faGavel,
@@ -76,12 +76,13 @@
     </div>
 
     <div class="navbar-menu" class:is-active={menuActive}>
-      <!-- <div class="navbar-start">
-        <a href="/posts/latest" class="navbar-item">Les plus récents</a>
-        <a href="/posts/trending" class="navbar-item">Trendy</a>
-        <a href="/posts/hot" class="navbar-item">Les mieux notés</a>
-        <a href="/posts/controversial" class="navbar-item">Contreversés</a>
-      </div> -->
+      <div class="navbar-start">
+        <a class="navbar-item" href="/my-account" on:click={closeMenu}>
+          <Fa icon={faBuildingColumns} class="icon" />
+          <span>Mon compte</span>
+        </a>
+      </div>
+
       <div class="navbar-end">
         {#if $isAdmin}
           <a class="navbar-item" href="/admin" on:click={closeMenu}>
@@ -99,12 +100,10 @@
               <span>{$user.name}</span>
             </div>
             <div class="navbar-dropdown">
-              <a class="navbar-item" href="/my-account" on:click={closeMenu}>
-                <!-- <Fa icon={faDoorOpen} class="icon" /> -->
+              <!-- <a class="navbar-item" href="/my-account" on:click={closeMenu}>
                 <span>Mon compte</span>
-              </a>
+              </a> -->
               <a class="navbar-item" href on:click|preventDefault={disconnect}>
-                <!-- <span class="icon"><Fa icon={faDoorOpen}  /></span> -->
                 <span>Déconnexion</span>
               </a>
             </div>
