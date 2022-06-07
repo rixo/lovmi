@@ -59,7 +59,7 @@
             />
             Un autre utilisateur Lovmi
           </label>
-          <label class="radio">
+          <label class="radio ml-0">
             <input
               type="radio"
               name="answer"
@@ -97,10 +97,11 @@
             in:slide|local={{ delay: 400, duration: 400 }}
           >
             <p class="is-size-4">Bientôt disponible&nbsp;!</p>
-            <p class="">Cette fonctionalité arrive prochainement.</p>
-            <p class="is-size-7">
-              (Pour l'instant on s'occupe de votre argent.)
+            <p class="">
+              Cette fonctionalité arrive prochainement tout bientôt, en temps
+              utile.
             </p>
+            <p class="is-size-7">Pour l'instant on s'occupe de votre argent.</p>
           </div>
         {/if}
       </div>
